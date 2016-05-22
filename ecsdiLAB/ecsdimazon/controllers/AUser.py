@@ -3,6 +3,7 @@ import json
 from flask import Flask, request
 
 from ecsdiLAB.ecsdimazon.context.ECSDIContext import ECSDIContext
+from ecsdiLAB.ecsdimazon.controllers import Constants
 
 app = Flask(__name__)
 
@@ -37,4 +38,4 @@ def search_products():
 
 
 if __name__ == '__main__':
-    app.run()
+    app.run(port=Constants.PORT_AUSER)
