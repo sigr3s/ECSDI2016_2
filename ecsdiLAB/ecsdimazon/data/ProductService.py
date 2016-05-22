@@ -24,7 +24,6 @@ class ProductService:
         cls.products.add((PrE.InternalProduct, RDF.type, OWL.Class))
 
     def search(self, name, price_min, price_max, seller, weight_min, weight_max):
-        algo = self.products.value(None, Namespace('http://www.owl-ontologies.com/Ontology1463560793.owl#Product'), object=Literal(11111))
         qres = self.products.query("""SELECT ?x ?ean ?name ?brand ?price ?weight ?height ?width ?seller
         WHERE {
             ?x <http://www.owl-ontologies.com/Ontology1463560793.owl#Product> 11111
