@@ -1,6 +1,6 @@
 import json
 
-from flask import Flask
+from flask import Flask, request
 
 from ecsdiLAB.ecsdimazon.controllers import Constants
 
@@ -15,6 +15,11 @@ def hello_world():
         route = rule.rule
         links.append(methods + " : " + route)
     return json.dumps(links)
+
+
+@app.route('/products/purchase', methods=['POST'])
+def purchase_products():
+    products = json.loads(request.get_data(as_text=True))
 
 
 if __name__ == '__main__':
