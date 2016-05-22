@@ -1,4 +1,4 @@
-from ecsdiLAB.data.ProductService import ProductService
+from ecsdiLAB.ecsdimazon.data.ProductService import ProductService
 
 
 class ECSDIContext:

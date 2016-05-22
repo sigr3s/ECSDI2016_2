@@ -1,3 +1,5 @@
+import json
+
 from flask import Flask, request
 
 from ecsdiLAB.ecsdimazon.context.ECSDIContext import ECSDIContext
@@ -9,7 +11,12 @@ context = ECSDIContext()
 
 @app.route('/')
 def hello_world():
-    return ""
+    links = []
+    for rule in app.url_map.iter_rules():
+        methods = str(rule.methods)
+        route = rule.rule
+        links.append(methods + " : " + route)
+    return json.dumps(links)
 
 
 @app.route('/products/search', methods=['GET'])

@@ -6,7 +6,8 @@ from rdflib.namespace import RDF, RDFS, Namespace, FOAF, OWL
 class ProductService:
 
     def __init__(self):
-        self.products = Graph().parse("products.rdf", format="turtle")
+        pass
+        # self.products = Graph().parse("products.rdf", format="turtle")
 
     def initialize(cls):
         PrE = Namespace("http://www.products.org/ontology/")
