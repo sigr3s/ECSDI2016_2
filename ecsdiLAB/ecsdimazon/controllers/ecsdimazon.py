@@ -1,7 +1,6 @@
 from flask import Flask, request
 
 from ecsdiLAB.ecsdimazon.context.ECSDIContext import ECSDIContext
-from ecsdiLAB.ecsdimazon.data import ProductService
 
 app = Flask(__name__)
 
@@ -22,10 +21,12 @@ def search_products():
     search_product_weight_max = request.args.get('weightMax')
     search_product_weight_min = request.args.get('weightMin')
 
-    ps = ProductService()
-
-    return ps.search(search_product_name, search_product_price_min, search_product_price_max, search_product_seller,
-                     search_product_weight_min, search_product_weight_max)
+    return context.product_service.search(search_product_name,
+                                          search_product_price_min,
+                                          search_product_price_max,
+                                          search_product_seller,
+                                          search_product_weight_min,
+                                          search_product_weight_max)
 
 
 if __name__ == '__main__':
