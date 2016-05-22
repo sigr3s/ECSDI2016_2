@@ -1,8 +1,11 @@
-from flask import Flask, request, Response
-from ecsdiLAB import ProductService
-import json
+from flask import Flask, request
+
+from ecsdiLAB.ecsdimazon.context.ECSDIContext import ECSDIContext
+from ecsdiLAB.ecsdimazon.data import ProductService
 
 app = Flask(__name__)
+
+context = ECSDIContext()
 
 
 @app.route('/')

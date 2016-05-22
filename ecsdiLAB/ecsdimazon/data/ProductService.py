@@ -8,7 +8,6 @@ class ProductService:
     def __init__(self):
         self.products = Graph().parse("products.rdf", format="turtle")
 
-    @classmethod
     def initialize(cls):
         PrE = Namespace("http://www.products.org/ontology/")
         PrEP = Namespace("http://www.products.org/ontology/property/")
@@ -19,7 +18,6 @@ class ProductService:
         cls.products.add((PrE.InternalProduct, RDF.type, OWL.Class))
 
 
-    @classmethod
     def search(self, name, price_min, price_max, seller, weight_min, weight_max):
         qres = self.products.query(
 
