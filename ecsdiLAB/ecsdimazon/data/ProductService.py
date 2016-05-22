@@ -5,10 +5,11 @@ from ecsdiLAB.ecsdimazon.controllers import Constants
 
 
 class ProductService:
-    PRODUCT_NAMESPACE = 'http://www.owl-ontologies.com/Ontology1463560793.owl#Product'
-
     def __init__(self):
-        self.products = Graph().parse("/products.rdf", format="turtle")
+        import os
+        if not os.path.exists('products.rdf'):
+            open('products.rdf', 'w')
+        self.products = Graph().parse("products.rdf", format="turtle")
 
     def initialize(cls):
         PrE = Namespace("http://www.products.org/ontology/")
@@ -27,12 +28,13 @@ class ProductService:
 
     def save(self, product):
         n = Namespace(Constants.NAMESPACE)
-        p = n.__getattr__('Product'+product.ean)()
+        p = n.__getattr__('#Product#' + str(product.ean))
         self.products.add((p, FOAF.EAN, Literal(product.ean)))
         self.products.add((p, FOAF.Name, Literal(product.name)))
-        self.products.add((p, FOAF.Brand, n.__getattr__('Brand'+product.brand)()))
+        self.products.add((p, FOAF.Brand, n.__getattr__('#Brand#' + str(product.brand))))
         self.products.add((p, FOAF.Price, Literal(product.price)))
         self.products.add((p, FOAF.Weight, Literal(product.weight)))
         self.products.add((p, FOAF.Height, Literal(product.height)))
         self.products.add((p, FOAF.Width, Literal(product.width)))
-        self.products.add((p, FOAF.Seller, n.__getattr__('Seller'+product.seller)()))
+        self.products.add((p, FOAF.Seller, n.__getattr__('#Seller#' + str(product.seller))))
+        self.products.serialize(destination='products.rdf', format='turtle')

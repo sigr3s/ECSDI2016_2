@@ -36,6 +36,7 @@ def new_product():
                       product_json["width"],
                       SellingCompany(product_json["seller"]))
     context.product_service.save(product)
+    return json.dumps(product_json)
 
 
 if __name__ == '__main__':
