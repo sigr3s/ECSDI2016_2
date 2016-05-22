@@ -29,12 +29,13 @@ def search_products():
     search_product_weight_max = request.args.get('weightMax')
     search_product_weight_min = request.args.get('weightMin')
 
-    return context.product_service.search(search_product_name,
+    products = context.product_service.search(search_product_name,
                                           search_product_price_min,
                                           search_product_price_max,
                                           search_product_seller,
                                           search_product_weight_min,
                                           search_product_weight_max)
+    return products
 
 
 if __name__ == '__main__':

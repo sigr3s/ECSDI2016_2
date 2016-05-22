@@ -2,6 +2,9 @@ from rdflib import Graph, Literal
 from rdflib.namespace import RDF, Namespace, OWL, FOAF
 
 from ecsdiLAB.ecsdimazon.controllers import Constants
+from ecsdiLAB.ecsdimazon.model.Brand import Brand
+from ecsdiLAB.ecsdimazon.model.Product import Product
+from ecsdiLAB.ecsdimazon.model.SellingCompany import SellingCompany
 
 
 class ProductService:
@@ -21,10 +24,23 @@ class ProductService:
         cls.products.add((PrE.InternalProduct, RDF.type, OWL.Class))
 
     def search(self, name, price_min, price_max, seller, weight_min, weight_max):
-        qres = self.products.query(
+        algo = self.products.value(None, Namespace('http://www.owl-ontologies.com/Ontology1463560793.owl#Product'), object=Literal(11111))
+        qres = self.products.query("""SELECT ?x ?ean ?name ?brand ?price ?weight ?height ?width ?seller
+        WHERE {
+            ?x <http://www.owl-ontologies.com/Ontology1463560793.owl#Product> 11111
+            ?x ns1:EAN 11111
+            ?x ns1:Name ?name
+            ?x ns1:Brand ?brand
+            ?x ns1:Price ?price
+            ?x ns1:Weight ?weight
+            ?x ns1:Height ?height
+            ?x ns1:Width ?width
+            ?x ns1:Seller ?seller
+        }
+        """)
 
-        )
-        return
+        for p, ean, name, brand, price, weight, height, width, seller in qres:
+            return Product(None, ean, name, Brand(brand), price, weight, height, width, SellingCompany(seller))
 
     def save(self, product):
         n = Namespace(Constants.NAMESPACE)
