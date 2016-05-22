@@ -1,3 +1,4 @@
+import sys
 from rdflib import Graph, Literal
 from rdflib.namespace import RDF, Namespace, OWL, FOAF
 
@@ -23,20 +24,20 @@ class ProductService:
         cls.products.bind('prodres', PrER)
         cls.products.add((PrE.InternalProduct, RDF.type, OWL.Class))
 
-    def search(self, name, price_min, price_max, seller, weight_min, weight_max):
+    def search(self, name, seller, weight_min, weight_max, price_min, price_max):
         qres = self.products.query("""SELECT ?x ?ean ?name ?brand ?price ?weight ?height ?width ?seller
-        WHERE {
-            ?x <http://www.owl-ontologies.com/Ontology1463560793.owl#Product> 11111
-            ?x ns1:EAN 11111
-            ?x ns1:Name ?name
-            ?x ns1:Brand ?brand
-            ?x ns1:Price ?price
-            ?x ns1:Weight ?weight
-            ?x ns1:Height ?height
-            ?x ns1:Width ?width
-            ?x ns1:Seller ?seller
-        }
-        """)
+        WHERE {{
+            ?x ns1:EAN ?ean.
+            ?x ns1:Name ?name.
+            ?x ns1:Brand ?brand.
+            ?x ns1:Price ?price.
+            ?x ns1:Weight ?weight.
+            ?x ns1:Height ?height.
+            ?x ns1:Width ?width.
+            ?x ns1:Seller ?seller.
+            FILTER (?price >= {0} && ?price <= {1})
+        }}
+        """.format(price_min, price_max))
 
         for p, ean, name, brand, price, weight, height, width, seller in qres:
             return Product(None, ean, name, Brand(brand), price, weight, height, width, SellingCompany(seller))
