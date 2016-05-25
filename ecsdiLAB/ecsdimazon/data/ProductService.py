@@ -39,8 +39,7 @@ class ProductService:
             FILTER (?price >= {0} && ?price <= {1} && regex(?name, "{2}", "i") {3} {4})
         }}
         """.format(price_min, price_max, name,
-                   "&& ?brand = \"" + URIRef(
-                       'http://www.owl-ontologies.com/Ontology1463560793.owl#Brand#' + brand + "\"") if brand is not None else "",
+                   "&& ?brand = <http://www.owl-ontologies.com/Ontology1463560793.owl#Brand#" + brand + ">" if brand is not None else "",
                    "" if ean is None else " && ?ean = " + str(ean))
         print query
         qres = self.products.query(query)
