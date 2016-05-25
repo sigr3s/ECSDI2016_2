@@ -5,6 +5,7 @@ __pycache__/
 *.py[cod]
 *$py.class
 /ecsdiLAB/ecsdimazon/controllers/products.rdf
+/ecsdiLAB/ecsdimazon/controllers/purchases.rdf
 
 # C extensions
 *.so

@@ -16,6 +16,9 @@ class ProductService:
         if not os.path.exists('products.rdf'):
             open('products.rdf', 'w')
         self.products = Graph().parse("products.rdf", format="turtle")
+        if not os.path.exists('purchases.rdf'):
+            open('purchases.rdf', 'w')
+        self.purchases = Graph().parse("purchases.rdf", format="turtle")
 
     def initialize(cls):
         PrE = Namespace("http://www.products.org/ontology/")
@@ -63,5 +66,5 @@ class ProductService:
         for ean in products:
             uri = n.__getattr__('#Product#' + str(ean))
             if not [uri, None, None] in self.products:
-                return json.dumps("")
+                return json.dumps(" Error, product is not in the store")
         return products
