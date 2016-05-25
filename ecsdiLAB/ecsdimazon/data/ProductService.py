@@ -37,9 +37,9 @@ class ProductService:
             ?x ns1:Height ?height.
             ?x ns1:Width ?width.
             ?x ns1:Seller ?seller.
-            FILTER (?price >= {0} && ?price <= {1})
+            FILTER (?price >= {0} && ?price <= {1} && regex(?name, "{2}", "i"))
         }}
-        """.format(price_min, price_max))
+        """.format(price_min, price_max, name))
 
         for p, ean, name, brand, price, weight, height, width, seller in qres:
             return Product(None, ean, name, Brand(brand), price, weight, height, width, SellingCompany(seller))
@@ -57,7 +57,7 @@ class ProductService:
         self.products.add((p, FOAF.Seller, n.__getattr__('#Seller#' + str(product.seller))))
         self.products.serialize(destination='products.rdf', format='turtle')
 
-    def purchase(self,products):
+    def purchase(self, products):
         n = Namespace(Constants.NAMESPACE)
         for ean in products:
             uri = n.__getattr__('#Product#' + str(ean))

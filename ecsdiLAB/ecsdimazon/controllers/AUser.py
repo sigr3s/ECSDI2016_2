@@ -35,8 +35,7 @@ def search_products():
                                               search_product_weight_min,
                                               search_product_weight_max,
                                               search_product_price_min,
-                                              search_product_price_max
-                                              )
+                                              search_product_price_max)
     return products
 
 
