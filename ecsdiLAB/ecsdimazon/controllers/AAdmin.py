@@ -26,15 +26,7 @@ def list_all_endpoints():
 @app.route('/products/', methods=['POST'])
 def new_product():
     product_json = json.loads(request.get_data(as_text=True))
-    product = Product(None,
-                      product_json["ean"],
-                      product_json["name"],
-                      Brand(product_json["brand"]),
-                      product_json["price"],
-                      product_json["weight"],
-                      product_json["height"],
-                      product_json["width"],
-                      SellingCompany(product_json["seller"]))
+    product = Product(product_json)
     context.product_service.save(product)
     return json.dumps(product_json)
 
