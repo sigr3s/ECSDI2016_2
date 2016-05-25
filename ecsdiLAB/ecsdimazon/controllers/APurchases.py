@@ -1,10 +1,11 @@
 import json
 
 from flask import Flask, request
-
+from ecsdiLAB.ecsdimazon.context.ECSDIContext import ECSDIContext
 from ecsdiLAB.ecsdimazon.controllers import Constants
 
 app = Flask(__name__)
+context = ECSDIContext()
 
 
 @app.route('/')
@@ -19,7 +20,9 @@ def hello_world():
 
 @app.route('/products/purchase', methods=['POST'])
 def purchase_products():
-    products = json.loads(request.get_data(as_text=True))
+    products_json = json.loads(request.get_data(as_text=True))
+    products = context.product_service.purchase(products_json)
+    return json.dumps(products)
 
 
 if __name__ == '__main__':

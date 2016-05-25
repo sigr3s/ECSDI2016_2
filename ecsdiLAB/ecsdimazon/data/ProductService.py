@@ -1,4 +1,6 @@
+import json
 import sys
+
 from rdflib import Graph, Literal
 from rdflib.namespace import RDF, Namespace, OWL, FOAF
 
@@ -54,3 +56,11 @@ class ProductService:
         self.products.add((p, FOAF.Width, Literal(product.width)))
         self.products.add((p, FOAF.Seller, n.__getattr__('#Seller#' + str(product.seller))))
         self.products.serialize(destination='products.rdf', format='turtle')
+
+    def purchase(self,products):
+        n = Namespace(Constants.NAMESPACE)
+        for ean in products:
+            uri = n.__getattr__('#Product#' + str(ean))
+            if not [uri, None, None] in self.products:
+                return json.dumps("")
+        return products
