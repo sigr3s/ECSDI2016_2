@@ -40,9 +40,10 @@ class ProductService:
             FILTER (?price >= {0} && ?price <= {1} && regex(?name, "{2}", "i"))
         }}
         """.format(price_min, price_max, name))
-
+        search_res = []
         for p, ean, name, brand, price, weight, height, width, seller in qres:
-            return Product(None, ean, name, Brand(brand), price, weight, height, width, SellingCompany(seller))
+            search_res.append(Product(None, ean, name, Brand(brand), price, weight, height, width, SellingCompany(seller)))
+        return search_res
 
     def save(self, product):
         n = Namespace(Constants.NAMESPACE)

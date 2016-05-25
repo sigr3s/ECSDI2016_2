@@ -23,20 +23,20 @@ def hello_world():
 
 @app.route('/products/search', methods=['GET'])
 def search_products():
-    search_product_name = request.args.get('name')
+    search_product_name = request.args.get('name', "")
     search_product_price_min = request.args.get('priceMin', 0)
     search_product_price_max = request.args.get('priceMax', sys.maxint)
     search_product_seller = request.args.get('seller')
     search_product_weight_max = request.args.get('weightMax')
     search_product_weight_min = request.args.get('weightMin')
 
-    products = context.product_service.search(search_product_name,
+    searched_products = context.product_service.search(search_product_name,
                                               search_product_seller,
                                               search_product_weight_min,
                                               search_product_weight_max,
                                               search_product_price_min,
                                               search_product_price_max)
-    return products
+    return json.dumps(searched_products)
 
 
 if __name__ == '__main__':
