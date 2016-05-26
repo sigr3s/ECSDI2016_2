@@ -64,6 +64,19 @@ class ProductService:
         self.products.add((p, FOAF.Seller, n.__getattr__('#Seller#' + str(product.seller))))
         self.products.serialize(destination='products.rdf', format='turtle')
 
+    def upload_in_catalog(self, product):
+        n = Namespace(Constants.NAMESPACE)
+        p = n.__getattr__('#Product#' + str(product.ean))
+        self.products.add((p, FOAF.EAN, Literal(product.ean)))
+        self.products.add((p, FOAF.Name, Literal(product.name)))
+        self.products.add((p, FOAF.Brand, n.__getattr__('#Brand#' + str(product.brand))))
+        self.products.add((p, FOAF.Price, Literal(product.price)))
+        self.products.add((p, FOAF.Weight, Literal(product.weight)))
+        self.products.add((p, FOAF.Height, Literal(product.height)))
+        self.products.add((p, FOAF.Width, Literal(product.width)))
+        self.products.add((p, FOAF.Seller, n.__getattr__('#Seller#' + str(product.seller))))
+        self.products.serialize(destination='catalog.rdf', format='turtle')
+
     def purchase(self, products):
         n = Namespace(Constants.NAMESPACE)
         for ean in products:

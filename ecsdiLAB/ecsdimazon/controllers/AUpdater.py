@@ -15,7 +15,7 @@ def new_product_in_catalog():
     product_json = json.loads(request.get_data(as_text=True))
     product_json["seller"] = "seller"
     product = Product.from_json(product_json)
-    context.product_service.save(product)
+    context.product_service.upload_in_catalog(product)
     return json.dumps(product_json)
 
 if __name__ == '__main__':
