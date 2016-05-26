@@ -26,10 +26,10 @@ def list_all_endpoints():
 @app.route('/products/', methods=['POST'])
 def new_product():
     product_json = json.loads(request.get_data(as_text=True))
-    product = Product(product_json)
+    product = Product.from_json(product_json)
     context.product_service.save(product)
     return json.dumps(product_json)
 
 
 if __name__ == '__main__':
-    app.run(port=Constants.PORT_AADMIN)
+    app.run(port=Constants.PORT_AADMIN,debug=True)
