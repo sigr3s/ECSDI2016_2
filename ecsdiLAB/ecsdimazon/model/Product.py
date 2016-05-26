@@ -34,7 +34,7 @@ class Product:
     @classmethod
     def from_rdf_xml(cls, graph):
         query = """SELECT ?x ?ean ?name ?brand ?price ?weight ?height ?width ?seller
-            WHERE {{
+            WHERE {
                 ?x ns1:EAN ?ean.
                 ?x ns1:Name ?name.
                 ?x ns1:Brand ?brand.
@@ -43,7 +43,7 @@ class Product:
                 ?x ns1:Height ?height.
                 ?x ns1:Width ?width.
                 ?x ns1:Seller ?seller.
-            }}
+            }
         """
         qres = graph.query(query)
         search_res = []
