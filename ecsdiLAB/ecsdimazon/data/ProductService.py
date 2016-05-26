@@ -66,8 +66,8 @@ class ProductService:
 
     def purchase(self, products):
         n = Namespace(Constants.NAMESPACE)
-        for ean in products:
+        for ean in map(lambda p: p.ean, products):
             uri = n.__getattr__('#Product#' + str(ean))
-            if not [uri, None, None] in self.products:
+            if not (uri, None, None) in self.products:
                 return json.dumps(" Error, product is not in the store")
         return products
