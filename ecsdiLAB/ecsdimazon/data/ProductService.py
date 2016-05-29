@@ -1,4 +1,5 @@
 import json
+import uuid
 
 from rdflib import Graph, Literal, URIRef
 from rdflib.namespace import RDF, Namespace, OWL, FOAF
@@ -70,4 +71,19 @@ class ProductService:
             uri = n.__getattr__('#Product#' + str(ean))
             if not [uri, None, None] in self.products:
                 return json.dumps(" Error, product is not in the store")
+
+        for eanP in products:
+            query = """SELECT ?x
+            WHERE {{
+                ?x ns1:EAN ?ean.
+                FILTER (?ean = {0})
+            }}
+            """.format(str(eanP))
+            qres = self.products.query(query)
+            for p in qres:
+                uid = uuid.uuid4()
+                bp = n.__getattr__('#BoughtProduct#' + str(uid))
+                self.purchases.add(bp, FOAF.uuid, str(uid))
+                self.purchases.add(bp, FOAF.product, n.__getattr__('#Product#' +str(p)))
+                self.purchases.serialize(destination='purchases.rdf', format='turtle')
         return products
