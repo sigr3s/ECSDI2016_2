@@ -34,7 +34,7 @@ def search_products():
                                                        search_product_price_min,
                                                        search_product_price_max,
                                                        search_product_ean)
-    return json.dumps(map(lambda p: p.to_json(), searched_products))
+    return json.dumps(map(lambda p: p.to_rdf_xml(), searched_products))
 
 
 if __name__ == '__main__':
