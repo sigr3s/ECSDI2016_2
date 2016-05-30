@@ -32,4 +32,4 @@ def new_product():
 
 
 if __name__ == '__main__':
-    app.run(port=Constants.PORT_AADMIN,debug=True)
+    app.run(port=Constants.PORT_AADMIN, debug=True)
