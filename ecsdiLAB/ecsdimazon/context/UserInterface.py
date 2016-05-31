@@ -1,6 +1,5 @@
-import requests
+from pip._vendor import requests
 from rdflib import Graph
-
 from ecsdiLAB.ecsdimazon.controllers import Constants
 from ecsdiLAB.ecsdimazon.model.Product import Product
 
