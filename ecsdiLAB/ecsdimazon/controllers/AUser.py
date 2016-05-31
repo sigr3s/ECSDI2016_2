@@ -5,6 +5,7 @@ from flask import Flask, request
 
 from ecsdiLAB.ecsdimazon.context.ECSDIContext import ECSDIContext
 from ecsdiLAB.ecsdimazon.controllers import Constants
+from ecsdiLAB.ecsdimazon.model.Product import Product
 
 app = Flask(__name__)
 
@@ -34,7 +35,7 @@ def search_products():
                                                        search_product_price_min,
                                                        search_product_price_max,
                                                        search_product_ean)
-    return json.dumps(map(lambda p: p.to_rdf_xml(), searched_products))
+    return Product.list_to_graph(searched_products).serialize()
 
 
 if __name__ == '__main__':

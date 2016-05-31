@@ -1,24 +1,30 @@
 import requests
+from rdflib import Graph
+
 from ecsdiLAB.ecsdimazon.controllers import Constants
+from ecsdiLAB.ecsdimazon.model.Product import Product
 
 
 def main():
-    searchDirection = "http://localhost:" + str(Constants.PORT_AUSER) + "/products/search?"
+    search_direction = "http://localhost:" + str(Constants.PORT_AUSER) + "/products/search?"
     ean = raw_input("ean: ")
     if ean == "":
         name = raw_input("name: ")
         brand = raw_input("brand: ")
         price_min = raw_input("price min: ")
         price_max = raw_input("namprice max: ")
-        searchDirection += "name=" + name + "&brand=" + brand + "&priceMin=" + price_min + "&priceMax=" + price_max
+        search_direction += "name=" + name + "&brand=" + brand + "&priceMin=" + price_min + "&priceMax=" + price_max
     else:
-        searchDirection += "name=&ean=1"
-    req = requests.get(searchDirection).text
+        search_direction += "ean=" + ean
+    req = requests.get(search_direction).text
     print req
-    """products = Product.from_rdf_xml(Graph().parse(req, format='xml'))"""
+    gres = Graph().parse(data=req, format='xml')
+    products = Product.from_graph(gres)
     """
         TODO seleccionar producto para comprar
     """
+    for product in products:
+        print product.name
 
 
 if __name__ == "__main__":

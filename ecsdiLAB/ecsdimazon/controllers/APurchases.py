@@ -24,7 +24,7 @@ def hello_world():
 
 @app.route('/comm', methods=['POST'])
 def purchase_products():
-    products_to_buy = Product.from_rdf_xml(Graph().parse(data=request.get_data(as_text=True), format='xml'))
+    products_to_buy = Product.from_graph(Graph().parse(data=request.get_data(as_text=True), format='xml'))
     products = context.product_service.purchase(products_to_buy)
     return json.dumps(products)
 

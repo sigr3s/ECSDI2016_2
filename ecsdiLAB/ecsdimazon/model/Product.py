@@ -17,7 +17,7 @@ class Product:
         self.width = width
         self.seller = seller
 
-    def to_rdf_xml(self):
+    def to_graph(self):
         graph = Graph()
         n = Namespace(Constants.NAMESPACE)
         p = n.__getattr__('#Product#' + str(self.ean))
@@ -29,10 +29,17 @@ class Product:
         graph.add((p, FOAF.Height, Literal(self.height)))
         graph.add((p, FOAF.Width, Literal(self.width)))
         graph.add((p, FOAF.Seller, n.__getattr__('#Seller#' + str(self.seller.name))))
-        return graph.serialize(format='xml')
+        return graph
 
     @classmethod
-    def from_rdf_xml(cls, graph):
+    def list_to_graph(cls, products):
+        graph = Graph()
+        for product in products:
+            graph = graph + product.to_graph()
+        return graph
+
+    @classmethod
+    def from_graph(cls, graph):
         query = """SELECT ?x ?ean ?name ?brand ?price ?weight ?height ?width ?seller
             WHERE {
                 ?x ns1:EAN ?ean.
