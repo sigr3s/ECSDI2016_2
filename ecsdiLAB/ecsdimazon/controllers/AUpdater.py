@@ -11,11 +11,9 @@ app = Flask(__name__)
 
 context = ECSDIContext()
 
-@app.route('/catalog/', methods=['POST'])
+@app.route('/catalog', methods=['POST'])
 def new_product_in_catalog():
-    product = Product.from_rdf_xml(request.get_data(as_text=True))
-    product["seller"] = "seller"
-    product.to_rdf_xml()
+    product = Product.from_graph(Graph().parse(data=request.get_data(as_text=True), format='xml'))
     context.product_service.upload_in_catalog(product)
     return json.dumps(product)
 
