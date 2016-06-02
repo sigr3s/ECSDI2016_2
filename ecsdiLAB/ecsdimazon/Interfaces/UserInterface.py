@@ -21,6 +21,10 @@ def main():
         brand = raw_input("brand: ")
         price_min = raw_input("price min: ")
         price_max = raw_input("price max: ")
+        if price_min == "":
+            price_min = 0
+        if price_max == "":
+            price_max = sys.float_info.max
 
     product_search = SearchProductsMessage(ean, name, brand, price_min, price_max)
     print url
