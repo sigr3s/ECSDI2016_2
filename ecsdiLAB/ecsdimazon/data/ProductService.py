@@ -43,7 +43,9 @@ class ProductService:
             FILTER (?price >= {0} && ?price <= {1} && regex(?name, "{2}", "i") {3} {4})
         }}
         """.format(price_min, price_max, name,
-                   "&& ?brand = <http://www.owl-ontologies.com/Ontology1463560793.owl#Brand#" + brand + ">" if brand is not None else "",
+                   "&& ?brand = <" + brand + ">"
+                   if brand and brand != "http://www.owl-ontologies.com/Ontology1463560793.owl#Brand#"
+                   else "",
                    "" if ean is None else " && ?ean = " + str(ean))
         print query
         qres = self.products.query(query)
@@ -97,6 +99,6 @@ class ProductService:
                 uid = uuid.uuid4()
                 bp = n.__getattr__('#BoughtProduct#' + str(uid))
                 self.purchases.add(bp, FOAF.uuid, str(uid))
-                self.purchases.add(bp, FOAF.product, n.__getattr__('#Product#' +str(p)))
+                self.purchases.add(bp, FOAF.product, n.__getattr__('#Product#' + str(p)))
                 self.purchases.serialize(destination='purchases.rdf', format='turtle')
         return products
