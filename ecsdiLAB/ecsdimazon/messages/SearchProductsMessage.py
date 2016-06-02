@@ -18,7 +18,7 @@ class SearchProductsMessage:
         p = n.__getattr__('#Product#' + str(self.ean))
         graph.add((p, FOAF.EAN, Literal(self.ean)))
         graph.add((p, FOAF.Name, Literal(self.name)))
-        graph.add((p, FOAF.Brand, n.__getattr__('#Brand#' + str(self.brand.name))))
+        graph.add((p, FOAF.Brand, n.__getattr__('#Brand#' + str(self.brand))))
         graph.add((p, FOAF.PriceMin, Literal(self.price_min)))
         graph.add((p, FOAF.PriceMax, Literal(self.price_max)))
         return graph
@@ -42,7 +42,5 @@ class SearchProductsMessage:
             }
         """
         qres = graph.query(query)
-        search_res = []
         for p, ean, name, price_min, price_max, brand in qres:
-            search_res.append(SearchProductsMessage(ean, name, brand, price_min, price_max))
-        return search_res
+            return SearchProductsMessage(ean, name, brand, price_min, price_max)

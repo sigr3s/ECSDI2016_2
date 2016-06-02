@@ -1,44 +1,35 @@
 import requests
 from rdflib import Graph
-
+from ecsdiLAB.ecsdimazon.messages import Ontologies
 from ecsdiLAB.ecsdimazon.controllers import Constants
+from ecsdiLAB.ecsdimazon.messages.SearchProductsMessage import SearchProductsMessage
+from ecsdiLAB.ecsdimazon.controllers.AgentUtil import build_message
 from ecsdiLAB.ecsdimazon.model.Product import Product
 
 
 def main():
-    search_direction = "http://localhost:" + str(Constants.PORT_AUSER) + "/products/search?"
+    url = "http://localhost:" + str(Constants.PORT_AUSER) + "/comm"
     ean = raw_input("ean: ")
+    name = None
+    brand = None
+    price_min = None
+    price_max = None
     if ean is "":
-        need_and = False
+        ean = None
         name = raw_input("name: ")
         brand = raw_input("brand: ")
         price_min = raw_input("price min: ")
         price_max = raw_input("price max: ")
-        if name is not "":
-            search_direction += "name=" + name
-            need_and = True
-        if brand is not "":
-            if need_and:
-                search_direction += "&"
-            search_direction += "brand=" + brand
-            need_and = True
-        if price_min is not "":
-            if need_and:
-                search_direction += "&"
-            search_direction += "priceMin=" + price_min
-            need_and = True
-        if price_max is not "":
-            if need_and:
-                search_direction += "&"
-            search_direction += "priceMax=" + price_max
-    else:
-        search_direction += "ean=" + ean
-    print search_direction
-    req = requests.get(search_direction).text
-    if req == "":
+
+    product_search = SearchProductsMessage(ean, name, brand, price_min, price_max)
+    print url
+
+    response = requests.get(url, data=build_message(product_search.to_graph(), '', Ontologies.SEARCH_PRODUCT_MESSAGE).serialize(format='xml'))
+    print response
+    if response == "":
         print "No hay productos con los parametros dados"
     else:
-        products_graph = Graph().parse(data=req, format='xml')
+        products_graph = Graph().parse(data=response.text, format='xml')
         products = Product.from_graph(products_graph)
         for product in products:
             print product.name

@@ -1,7 +1,8 @@
 import uuid
 
-from rdflib import Namespace
+from rdflib import Namespace, Literal
 from rdflib.namespace import RDF
+
 
 ACL = Namespace("http://www.nuin.org/ontology/fipa/acl#")
 
@@ -25,9 +26,9 @@ def build_message(gmess, perf, ontology, sender=None, receiver=None, content=Non
     ms = ACL[mssid]
     gmess.bind('acl', ACL)
     gmess.add((ms, RDF.type, ACL.FipaAclMessage))
-    gmess.add((ms, ACL.performative, perf))
-    gmess.add((ms, ACL.sender, sender))
-    gmess.add((ms, ACL.ontology, ontology))
+    gmess.add((ms, ACL.performative, Literal(perf)))
+    gmess.add((ms, ACL.sender, Literal(sender)))
+    gmess.add((ms, ACL.ontology, Literal(ontology)))
     if receiver is not None:
         gmess.add((ms, ACL.receiver, receiver))
     if content is not None:
@@ -37,4 +38,4 @@ def build_message(gmess, perf, ontology, sender=None, receiver=None, content=Non
 
 def ontology_of_message(gmess):
     for s, p, o in gmess.triples((None, ACL.ontology, None)):
-        return o
+        return str(o)
