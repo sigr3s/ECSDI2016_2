@@ -18,8 +18,7 @@ class SearchProductsMessage:
         p = n.__getattr__('#Product#' + str(self.ean))
         graph.add((p, FOAF.EAN, Literal(self.ean)))
         graph.add((p, FOAF.Name, Literal(self.name)))
-        if self.brand:
-            graph.add((p, FOAF.Brand, n.__getattr__('#Brand#' + str(self.brand))))
+        graph.add((p, FOAF.Brand, n.__getattr__('#Brand#' + str(self.brand))))
         graph.add((p, FOAF.PriceMin, Literal(self.price_min)))
         graph.add((p, FOAF.PriceMax, Literal(self.price_max)))
         return graph
