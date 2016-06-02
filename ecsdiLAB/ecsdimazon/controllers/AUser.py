@@ -28,9 +28,9 @@ def hello_world():
 
 def search_products(graph):
     spm = SearchProductsMessage.from_graph(graph)
-    search_product_name = spm.name if spm.name is not None else ''
-    search_product_price_min = spm.price_min if spm.price_min is not None else 0
-    search_product_price_max = spm.price_max if spm.price_max is not None else sys.float_info.max
+    search_product_name = spm.name
+    search_product_price_min = spm.price_min
+    search_product_price_max = spm.price_max
     search_product_brand = spm.brand
     search_product_ean = spm.ean
 
@@ -46,7 +46,7 @@ def search_products(graph):
 def comm():
     graph = Graph().parse(data=request.data, format='xml')
     ontology = AgentUtil.ontology_of_message(graph)
-    routings[ontology](graph)
+    return routings[ontology](graph)
 
 
 routings = {

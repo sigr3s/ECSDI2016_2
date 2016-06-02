@@ -1,4 +1,5 @@
 import requests
+import sys
 from rdflib import Graph
 from ecsdiLAB.ecsdimazon.messages import Ontologies
 from ecsdiLAB.ecsdimazon.controllers import Constants
@@ -10,10 +11,10 @@ from ecsdiLAB.ecsdimazon.model.Product import Product
 def main():
     url = "http://localhost:" + str(Constants.PORT_AUSER) + "/comm"
     ean = raw_input("ean: ")
-    name = None
-    brand = None
-    price_min = None
-    price_max = None
+    name = ''
+    brand = ''
+    price_min = 0
+    price_max = sys.float_info.max
     if ean is "":
         ean = None
         name = raw_input("name: ")
