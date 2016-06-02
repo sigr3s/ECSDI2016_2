@@ -46,7 +46,7 @@ class ProductService:
                    "&& ?brand = <" + brand + ">"
                    if brand and brand != "http://www.owl-ontologies.com/Ontology1463560793.owl#Brand#"
                    else "",
-                   "" if ean is None or ean is 'None' else " && ?ean = " + str(ean))
+                   "" if ean is None or str(ean) is 'None' else " && ?ean = " + str(ean))
         print query
         qres = self.products.query(query)
         search_res = []
