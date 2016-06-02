@@ -55,5 +55,13 @@ class Product:
         qres = graph.query(query)
         search_res = []
         for p, ean, name, brand, price, weight, height, width, seller in qres:
-            search_res.append(Product(ean, name, Brand(brand), price, weight, height, width, SellingCompany(seller)))
+            search_res.append(Product(
+                ean.toPython(),
+                name.toPython(),
+                Brand(brand.toPython()),
+                price.toPython(),
+                weight.toPython(),
+                height.toPython(),
+                width.toPython(),
+                SellingCompany(seller.toPython())))
         return search_res

@@ -43,4 +43,9 @@ class SearchProductsMessage:
         """
         qres = graph.query(query)
         for p, ean, name, price_min, price_max, brand in qres:
-            return SearchProductsMessage(ean, name, brand, price_min, price_max)
+            return SearchProductsMessage(
+                ean.toPython(),
+                name.toPython(),
+                brand.toPython(),
+                price_min.toPython(),
+                price_max.toPython())
