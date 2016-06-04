@@ -10,6 +10,37 @@ from ecsdiLAB.ecsdimazon.model.Product import Product
 
 
 def main():
+    system_exit = False
+    while not system_exit:
+        search_product()
+        correct_response = False
+        while not correct_response:
+            system_exit = raw_input("Salir? (y/n) ")
+            if system_exit == 'y' or system_exit == 'n':
+                if system_exit == 'y':
+                    system_exit = True
+                else:
+                    system_exit = False
+                correct_response = True
+
+    """
+        TODO seleccionar producto para comprar
+    """
+
+
+def bought_products():
+    eans = []
+    purchase_url = "http://localhost:" + str(Constants.PORT_APURCHASES) + "/comm"
+    ean_to_buy = raw_input("Ean of the product you want: ")
+    eans.append(ean_to_buy)
+    product_purchase = PurchaseProductsMessage(eans)
+    response = requests.post(purchase_url, data=build_message(product_purchase.to_graph(), '',
+                                                              Ontologies.PURCHASE_PRODUCT_MESSAGE).serialize(
+        format='xml'))
+    print response
+
+
+def search_product():
     url = "http://localhost:" + str(Constants.PORT_AUSER) + "/comm"
     ean = raw_input("ean: ")
     name = ''
@@ -28,28 +59,24 @@ def main():
             price_max = sys.float_info.max
 
     product_search = SearchProductsMessage(ean, name, brand, price_min, price_max)
-    print url
 
-    response = requests.get(url, data=build_message(product_search.to_graph(), '', Ontologies.SEARCH_PRODUCT_MESSAGE).serialize(format='xml'))
-    print response
-    if response == "":
-        print "No hay productos con los parametros dados"
-    else:
+    response = requests.get(url, data=build_message(product_search.to_graph(), '', Ontologies.SEARCH_PRODUCT_MESSAGE)
+                            .serialize(format='xml'))
+
+    try:
         products_graph = Graph().parse(data=response.text, format='xml')
         products = Product.from_graph(products_graph)
+        i = 1
         for product in products:
-            print product.name
-    eans = []
-    purchase_url = "http://localhost:" + str(Constants.PORT_APURCHASES) + "/comm"
-    eanToBuy = raw_input("Ean of the product you want: ")
-    eans.append(eanToBuy)
-    product_purchase = PurchaseProductsMessage(eans)
-    response = requests.post(purchase_url, data=build_message(product_purchase.to_graph(), '',
-                                                    Ontologies.PURCHASE_PRODUCT_MESSAGE).serialize(format='xml'))
-    print response
-    """
-        TODO seleccionar producto para comprar
-    """
+            brand_split = str(product.brand).split('#')
+            seller_split = str(product.seller).split('#')
+            print str(i) + ". Codigo de barras: " + str(product.ean) + ", Nombre: " + str(product.name) + ", Marca: " + \
+                  brand_split[len(brand_split) - 1] + ", Vendedor: " + seller_split[
+                      len(seller_split) - 1] + ", Precio: " + str(product.price)
+            i += 1
+    except:
+        print "No hay productos que coincidan con los parametros pasados"
+
 
 if __name__ == "__main__":
     main()
