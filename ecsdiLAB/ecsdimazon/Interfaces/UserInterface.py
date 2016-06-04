@@ -72,14 +72,12 @@ def search_product():
             print str(i) + ". " + print_product(product)
             i += 1
         print
-        list_of_products = raw_input("Introduce los productos que quieres o dejalo en blanco si no quieres nada de la lista: ")
+        print "haz una lista con los productos que quieres meter en el carrito separado por espacios. (num producto)x(cuantos quieres)"
+        print "o dejalo en blanco si no quieres nada"
+        list_of_products = raw_input("")
         if list_of_products != "":
             lopSplit = list_of_products.strip().split(" ")
             try:
-                i = 0
-                for prod in lopSplit:
-                    lopSplit[i] = int(prod) - 1
-                    i += 1
                 add_to_cart(lopSplit, products)
             except ValueError:
                 print "todos los valores han de ser numericos"
@@ -90,24 +88,24 @@ def search_product():
 
 def add_to_cart(lop, products):
     for prod_num in lop:
+        prod_num_split = prod_num.split("x")
         try:
-            how_many = cart[products[prod_num]]
-            cart[products[prod_num]] = how_many + 1
+            how_many = cart[products[int(prod_num_split[0]) - 1]]
+            cart[products[prod_num]] = how_many + int(prod_num_split[1])
         except:
-            cart[products[prod_num]] = 1
+            cart[products[int(prod_num_split[0]) - 1]] = int(prod_num_split[1])
 
 
 def show_cart():
-    for key, value in cart.iteritems():
-        print print_product(key) + ": " + str(value)
-    option = raw_input("Comprar? y/n")
-    if(option == 'y'):
-        purchase()
+    if len(cart) != 0:
+        for key, value in cart.iteritems():
+            print print_product(key) + ": " + str(value)
+        option = raw_input("Comprar? y/n: ")
+        if(option == 'y'):
+            bought_products()
+    else:
+        print "No tienes productos en tu cesta"
     print
-
-
-def purchase():
-    """todo"""
 
 
 def print_product(product):
