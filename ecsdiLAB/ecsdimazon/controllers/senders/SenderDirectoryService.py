@@ -21,7 +21,7 @@ class SenderDirectoryService:
         query = """SELECT ?x ?name ?negotiationUri
             WHERE {{
                 ?x ns1:Name ?name.
-                ?x ns1:negotiationUri ?negotiationUri.
+                ?x ns1:NegotiationUri ?negotiationUri.
             }}
             """
         qres = self.senders.query(query)
