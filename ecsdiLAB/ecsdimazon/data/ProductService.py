@@ -14,9 +14,12 @@ from ecsdiLAB.ecsdimazon.model.SellingCompany import SellingCompany
 class ProductService:
     def __init__(self):
         import os
-        if not os.path.exists('products.rdf'):
-            open('products.rdf', 'w')
-        self.products = Graph().parse("products.rdf", format="turtle")
+        if not os.path.exists('catalog.rdf'):
+            open('catalog.rdf', 'w')
+        self.products = Graph().parse("catalog.rdf", format="turtle")
+        if not os.path.exists('catalog.rdf'):
+            open('catalog.rdf', 'w')
+        self.products_in_catalog = Graph().parse("catalog.rdf", format="turtle")
         if not os.path.exists('purchases.rdf'):
             open('purchases.rdf', 'w')
         self.purchases = Graph().parse("purchases.rdf", format="turtle")
@@ -66,22 +69,34 @@ class ProductService:
         self.products.add((p, FOAF.Height, Literal(product.height)))
         self.products.add((p, FOAF.Width, Literal(product.width)))
         self.products.add((p, FOAF.Seller, n.__getattr__('#Seller#' + str(product.seller))))
-        self.products.serialize(destination='products.rdf', format='turtle')
+        self.products.serialize(destination='catalog.rdf', format='turtle')
 
     def upload_in_catalog(self, product):
+        query = """SELECT ?x ?ean
+            WHERE {{
+                ?x ns1:EAN ?ean.
+            }}
+            """.format("" if product.ean is None or str(product.ean) == 'None' else "?ean = " + str(product.ean))
+        qres = self.products_in_catalog.query(query)
+        upload_result = []
+        for p, ean in qres:
+            if str(ean) == str(product.ean):
+                print "Found this ean"
+                return upload_result
+
         n = Namespace(Constants.NAMESPACE)
         p = n.__getattr__('#Product#' + str(product.ean))
-        self.products.add((p, FOAF.EAN, Literal(product.ean)))
-        self.products.add((p, FOAF.Name, Literal(product.name)))
-        self.products.add((p, FOAF.Brand, n.__getattr__('#Brand#' + str(product.brand))))
-        self.products.add((p, FOAF.Price, Literal(product.price)))
-        self.products.add((p, FOAF.Weight, Literal(product.weight)))
-        self.products.add((p, FOAF.Height, Literal(product.height)))
-        self.products.add((p, FOAF.Width, Literal(product.width)))
-        self.products.add((p, FOAF.Seller, n.__getattr__('#Seller#' + str(product.seller))))
-        self.products.serialize(destination='catalog.rdf', format='turtle')
-        upload_result = []
-        upload_result.append(Product(product.ean, product.name, Brand(product.brand), product.price,
+
+        self.products_in_catalog.add((p, FOAF.EAN, Literal(product.ean)))
+        self.products_in_catalog.add((p, FOAF.Name, Literal(product.name)))
+        self.products_in_catalog.add((p, FOAF.Brand, n.__getattr__('#Brand#' + str(product.brand))))
+        self.products_in_catalog.add((p, FOAF.Price, Literal(product.price)))
+        self.products_in_catalog.add((p, FOAF.Weight, Literal(product.weight)))
+        self.products_in_catalog.add((p, FOAF.Height, Literal(product.height)))
+        self.products_in_catalog.add((p, FOAF.Width, Literal(product.width)))
+        self.products_in_catalog.add((p, FOAF.Seller, n.__getattr__('#Seller#' + str(product.seller))))
+        self.products_in_catalog.serialize(destination='catalog.rdf', format='turtle')
+        upload_result.append(Product(product.ean, product.name , Brand(product.brand), product.price,
                                      product.weight, product.height, product.width, SellingCompany(product.seller)))
         return upload_result
 

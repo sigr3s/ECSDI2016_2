@@ -14,14 +14,14 @@ class SenderDirectoryService:
     def __init__(self):
         import os
         if not os.path.exists(SENDERS_FILE_NAME):
-            open('products.rdf', 'w')
+            open('catalog.rdf', 'w')
         self.senders = Graph().parse(SENDERS_FILE_NAME, format='turtle')
 
     def senders_list(self, graph):  # graph ignored on purpose, not needed
         query = """SELECT ?x ?name ?negotiationUri
             WHERE {{
                 ?x ns1:Name ?name.
-                ?x ns1:negotiationUri ?negotiationUri.
+                ?x ns1:NegotiationUri ?negotiationUri.
             }}
             """
         qres = self.senders.query(query)

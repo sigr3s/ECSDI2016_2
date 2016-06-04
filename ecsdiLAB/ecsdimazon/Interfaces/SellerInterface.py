@@ -33,36 +33,41 @@ def enter_seller_information():
     return seller
 
 def create_product(seller):
-    url = "http://localhost:" + str(Constants.PORT_AUPDATER) + "/comm"
-    ean = raw_input("ean: ")
-    if ean is "":
-        return
-    name = raw_input("name: ")
-    brand = raw_input("brand: ")
-    price = raw_input("price: ")
-    height = raw_input("height: ")
-    width = raw_input("width: ")
-    weight = raw_input("weight: ")
+    try :
+        url = "http://localhost:" + str(Constants.PORT_AUPDATER) + "/comm"
+        ean = raw_input("ean: ")
+        name = raw_input("name: ")
+        brand = raw_input("brand: ")
+        price = raw_input("price: ")
+        height = raw_input("height: ")
+        width = raw_input("width: ")
+        weight = raw_input("weight: ")
 
-    product_upload = UploadProductMessage(ean, name, brand, price, height, width, weight, seller)
+        product_upload = UploadProductMessage(int(ean), name, brand, float(price), float(height), float(width), float(weight), seller)
 
-    response = requests.get(url, data=build_message(product_upload.to_graph(), '', Ontologies.UPLOAD_PRODUCT_MESSAGE)
-                            .serialize(format='xml'))
+        response = requests.get(url, data=build_message(product_upload.to_graph(), '', Ontologies.UPLOAD_PRODUCT_MESSAGE)
+                                .serialize(format='xml'))
 
-    try:
-        products_graph = Graph().parse(data=response.text, format='xml')
-        """products = Product.from_graph(products_graph)
-        i = 1
-        for product in products:
-            brand_split = str(product.brand).split('#')
-            seller_split = str(product.seller).split('#')
-            print str(i) + ". Codigo de barras: " + str(product.ean) + ", Nombre: " + str(product.name) + ", Marca: " + \
-                  brand_split[len(brand_split) - 1] + ", Vendedor: " + seller_split[
-                      len(seller_split) - 1] + ", Precio: " + str(product.price)
-            i += 1
-            """
-    except:
-        print "No se ha podido crear el producto"
+        try:
+            products_graph = Graph().parse(data=response.text, format='xml')
+
+            if products_graph.__len__() == 0:
+                print "Ya existe un producto para este ean: " + ean
+            else :
+                products = Product.from_graph(products_graph)
+                for product in products:
+                    brand_split = str(product.brand).split('#')
+                    seller_split = str(product.seller).split('#')
+                    print "Se ha creado el producto:"
+                    print "Codigo de barras: " + str(product.ean) + ", Nombre: " + str(product.name) + ", Marca: " + \
+                          brand_split[len(brand_split) - 1] + ", Vendedor: " + seller_split[
+                              len(seller_split) - 1] + ", Precio: " + str(product.price)
+                    print "Altura: " + str(product.height) + ", Anchura: " + str(product.width) + ", Peso: " + str(product.weight)
+        except:
+            print "No se ha podido crear el producto"
+    except ValueError as ve:
+        print "Los parametros anadidos no son correctos"
+
 
 
 if __name__ == "__main__":

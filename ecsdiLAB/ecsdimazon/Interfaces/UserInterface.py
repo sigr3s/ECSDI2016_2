@@ -44,11 +44,13 @@ def dictionary_to_eans_request(eans):
 def bought_products():
     eans = []
     purchase_url = "http://localhost:" + str(Constants.PORT_APURCHASES) + "/comm"
+    username = raw_input("Nombre de usuario")
     direction = raw_input("Direccion de envio: ")
     dictionary_to_eans_request(eans)
-    product_purchase = PurchaseProductsMessage(eans, User("Juan", direction), Constants.PRIORITY_HIGH,
-                                               Constants.PAYMENT_PAYPAL)
+
+    product_purchase = PurchaseProductsMessage(eans, User(username,direction), Constants.PRIORITY_HIGH, Constants.PAYMENT_PAYPAL)
     response = requests.post(purchase_url, data=build_message(product_purchase.to_graph(), 'BUY',
+
                                                               Ontologies.PURCHASE_PRODUCT_MESSAGE).serialize(
         format='xml'))
     if response.status_code == 200:
@@ -67,17 +69,18 @@ def return_product():
 
 def search_product():
     url = "http://localhost:" + str(Constants.PORT_AUSER) + "/comm"
-    ean = raw_input("ean: ")
+    print "Rellena los siguientes campos de busqueda, dejalos vacios si no quieres buscar por ese campo"
+    ean = raw_input("Codigo de barras: ")
     name = ''
     brand = ''
     price_min = 0
     price_max = sys.float_info.max
     if ean is "":
         ean = None
-        name = raw_input("name: ")
-        brand = raw_input("brand: ")
-        price_min = raw_input("price min: ")
-        price_max = raw_input("price max: ")
+        name = raw_input("Nombre: ")
+        brand = raw_input("Marca: ")
+        price_min = raw_input("Precio minimo de busqueda: ")
+        price_max = raw_input("Precio maximo de busqueda: ")
         if price_min == "":
             price_min = 0
         if price_max == "":
@@ -96,7 +99,7 @@ def search_product():
             print str(i) + ". " + print_product(product)
             i += 1
         print
-        print "haz una lista con los productos que quieres meter en el carrito separado por espacios. (num producto)x(cuantos quieres)"
+        print "Haz una lista con los productos que quieres meter en el carrito separado por espacios. (num producto)x(cuantos quieres)"
         print "o dejalo en blanco si no quieres nada"
         list_of_products = raw_input("")
         if list_of_products != "":
