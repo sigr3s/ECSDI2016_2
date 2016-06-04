@@ -58,7 +58,7 @@ class AgentSender:
         qres = graph.query(query)
         for x, wanted_price_per_kilo in qres:
             ontology = Ontologies.SENDERS_NEGOTIATION_RESPONSE
-            if wanted_price_per_kilo < self.min_price_per_kilo:
+            if wanted_price_per_kilo < self.min_price_per_kilo or random.choice([True, False]):
                 performative = FIPAACLPerformatives.REFUSE
                 return build_message(Graph(), performative, ontology)
             else:

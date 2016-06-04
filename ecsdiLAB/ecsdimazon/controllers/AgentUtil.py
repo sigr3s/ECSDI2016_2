@@ -43,3 +43,7 @@ def ontology_of_message(gmess):
 def performative_of_message(gmess):
     for s, p, o in gmess.triples((None, ACL.performative, None)):
         return str(o)
+
+def field_of_message(gmess, predicate):
+    for s, p, o in gmess.triples((None, predicate, None)):
+        return str(o)
