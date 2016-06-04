@@ -14,7 +14,7 @@ class SenderDirectoryService:
     def __init__(self):
         import os
         if not os.path.exists(SENDERS_FILE_NAME):
-            open('catalog.rdf', 'w')
+            open(SENDERS_FILE_NAME, 'w')
         self.senders = Graph().parse(SENDERS_FILE_NAME, format='turtle')
 
     def senders_list(self, graph):  # graph ignored on purpose, not needed
