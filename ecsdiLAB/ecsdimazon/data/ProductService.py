@@ -5,6 +5,7 @@ from rdflib import Graph, Literal, URIRef
 from rdflib.namespace import RDF, Namespace, OWL, FOAF
 
 from ecsdiLAB.ecsdimazon.controllers import Constants
+from ecsdiLAB.ecsdimazon.model.BoughtProduct import BoughtProduct
 from ecsdiLAB.ecsdimazon.model.Brand import Brand
 from ecsdiLAB.ecsdimazon.model.Product import Product
 from ecsdiLAB.ecsdimazon.model.SellingCompany import SellingCompany
@@ -82,23 +83,35 @@ class ProductService:
 
     def purchase(self, products):
         n = Namespace(Constants.NAMESPACE)
-        for ean in map(lambda p: p.ean, products):
+        for ean in products:
             uri = n.__getattr__('#Product#' + str(ean))
             if not (uri, None, None) in self.products:
                 return json.dumps(" Error, product is not in the store")
-
+        selledProducts = []
         for eanP in products:
-            query = """SELECT ?x
-            WHERE {{
+            query = """SELECT ?x ?ean ?name ?brand ?price ?weight ?height ?width ?seller
+        WHERE {{
                 ?x ns1:EAN ?ean.
-                FILTER (?ean = {0})
+                ?x ns1:Name ?name.
+                ?x ns1:Brand ?brand.
+                ?x ns1:Price ?price.
+                ?x ns1:Weight ?weight.
+                ?x ns1:Height ?height.
+                ?x ns1:Width ?width.
+                ?x ns1:Seller ?seller.
+                FILTER  ( {0} )
             }}
-            """.format(str(eanP))
+            """.format("?ean = " + str(eanP))
             qres = self.products.query(query)
-            for p in qres:
-                uid = uuid.uuid4()
-                bp = n.__getattr__('#BoughtProduct#' + str(uid))
-                self.purchases.add(bp, FOAF.uuid, str(uid))
-                self.purchases.add(bp, FOAF.product, n.__getattr__('#Product#' + str(p)))
+            for p, ean, name, brand, price, weight, height, width, seller in qres:
+                n = Namespace(Constants.NAMESPACE)
+                uuid_guiones = uuid.uuid4()
+                int_uuid = uuid_guiones.int
+                bp = n.__getattr__('#BoughtProduct#' + str(int_uuid))
+                self.purchases.add((bp, FOAF.Uuid, Literal(int_uuid)))
+                self.purchases.add((bp, FOAF.Product, n.__getattr__('#Product#' + str(p))))
                 self.purchases.serialize(destination='purchases.rdf', format='turtle')
-        return products
+                selledProducts.append(BoughtProduct(int_uuid,
+                                                    Product(ean, name, Brand(brand), price, weight, height, width,
+                                                            SellingCompany(seller))))
+        return selledProducts

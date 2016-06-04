@@ -4,6 +4,7 @@ from rdflib import Graph
 from ecsdiLAB.ecsdimazon.messages import Ontologies
 from ecsdiLAB.ecsdimazon.controllers import Constants
 from ecsdiLAB.ecsdimazon.messages.SearchProductsMessage import SearchProductsMessage
+from ecsdiLAB.ecsdimazon.messages.PurchaseProductsMessage import PurchaseProductsMessage
 from ecsdiLAB.ecsdimazon.controllers.AgentUtil import build_message
 from ecsdiLAB.ecsdimazon.model.Product import Product
 
@@ -26,6 +27,18 @@ def main():
                 search_product()
             if option == 2:
                 show_cart()
+
+
+def bought_products():
+    eans = []
+    purchase_url = "http://localhost:" + str(Constants.PORT_APURCHASES) + "/comm"
+    ean_to_buy = raw_input("Ean of the product you want: ")
+    eans.append(ean_to_buy)
+    product_purchase = PurchaseProductsMessage(eans)
+    response = requests.post(purchase_url, data=build_message(product_purchase.to_graph(), '',
+                                                              Ontologies.PURCHASE_PRODUCT_MESSAGE).serialize(
+        format='xml'))
+    print response
 
 
 def search_product():
@@ -90,6 +103,7 @@ def show_cart():
     option = raw_input("Comprar? y/n")
     if(option == 'y'):
         purchase()
+    print
 
 
 def purchase():
