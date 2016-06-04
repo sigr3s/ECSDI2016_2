@@ -40,7 +40,7 @@ class PurchaseProductsMessage:
                 ?x ns1:Purchaser ?purchaser.
                 ?x ns1:SendTo ?send.
                 ?x ns1:Priority ?priority.
-                ?x ns1:Payment ?payment
+                ?x ns1:Payment ?payment.
             }
         """
         qres = graph.query(query)

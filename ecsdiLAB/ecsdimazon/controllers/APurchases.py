@@ -1,10 +1,13 @@
 import json
+import requests
 
 from flask import Flask, request
 from rdflib import Graph
 
+from ecsdiLAB.ecsdimazon.controllers.AgentUtil import build_message
 from ecsdiLAB.ecsdimazon.context.ECSDIContext import ECSDIContext
 from ecsdiLAB.ecsdimazon.controllers import Constants
+from ecsdiLAB.ecsdimazon.messages.SendProductsMessage import SendProductsMessage
 from ecsdiLAB.ecsdimazon.model.BoughtProduct import BoughtProduct
 from ecsdiLAB.ecsdimazon.model.Product import Product
 from ecsdiLAB.ecsdimazon.controllers import AgentUtil
@@ -28,6 +31,11 @@ def hello_world():
 def purchase_products(graph):
     ppm = PurchaseProductsMessage.from_graph(graph)
     products = context.product_service.purchase(ppm.eans, ppm.user, ppm.priority, ppm.payment)
+    product_send = SendProductsMessage(products)
+    send_url = "http://localhost:" + str(Constants.PORT_ASENDER) + "/comm"
+    requests.post(send_url, data=build_message(product_send.to_graph(), '',
+                                               Ontologies.SEND_PRODUCTS_MESSAGE).serialize(
+        format='xml'))
     return BoughtProduct.list_to_graph(products).serialize()
 
 
@@ -43,4 +51,4 @@ routings = {
 }
 
 if __name__ == '__main__':
-    app.run(port=Constants.PORT_APURCHASES,debug=True)
+    app.run(port=Constants.PORT_APURCHASES, debug=True)

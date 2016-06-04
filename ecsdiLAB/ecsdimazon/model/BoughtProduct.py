@@ -29,7 +29,6 @@ class BoughtProduct:
         graph.add((p, FOAF.Payment, Literal(self.payment)))
         graph.add((p, FOAF.Priority, Literal(self.priority)))
         graph.add((p, FOAF.Seller, n.__getattr__('#Seller#' + str(self.product.seller.name))))
-
         return graph
 
     @classmethod
