@@ -1,4 +1,5 @@
 import json
+import sys
 
 from flask import Flask, request
 from rdflib import Graph
@@ -43,8 +44,9 @@ def search_products(graph):
 
 @app.route('/comm', methods=['GET', 'POST'])
 def comm():
-    ontology = AgentUtil.ontology_of_message(request.data)
-    routings[ontology](Graph().parse(data=request.data))
+    graph = Graph().parse(data=request.data, format='xml')
+    ontology = AgentUtil.ontology_of_message(graph)
+    return routings[ontology](graph)
 
 
 routings = {
