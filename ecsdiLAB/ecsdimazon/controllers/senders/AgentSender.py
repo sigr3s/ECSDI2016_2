@@ -25,7 +25,7 @@ class AgentSender:
         ontology = Ontologies.SENDERS_REGISTER_REQUEST
         performative = FIPAACLPerformatives.REQUEST
         graph = self.sender.to_graph()
-        r = requests.post(directory_uri, data=build_message(graph, performative, ontology).serialize())
+        r = requests.post(directory_uri+"/comm", data=build_message(graph, performative, ontology).serialize())
         print "Register response was {}".format(r.text)
         response_performative = performative_of_message(Graph().parse(data=r.text))
         if response_performative == FIPAACLPerformatives.AGREE:

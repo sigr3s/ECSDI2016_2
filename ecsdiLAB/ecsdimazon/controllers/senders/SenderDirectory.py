@@ -22,7 +22,7 @@ def __execute_routing__(ontology, graph):
 def comm():
     graph = Graph().parse(data=request.data, format='xml')
     ontology = ontology_of_message(graph)
-    __execute_routing__(ontology, graph)
+    return __execute_routing__(ontology, graph)
 
 
 routings = {
