@@ -1,19 +1,18 @@
 import json
-import requests
 
+import requests
 from flask import Flask, request
 from rdflib import Graph
 
-from ecsdiLAB.ecsdimazon.controllers.AgentUtil import build_message
 from ecsdiLAB.ecsdimazon.context.ECSDIContext import ECSDIContext
+from ecsdiLAB.ecsdimazon.controllers import AgentUtil
 from ecsdiLAB.ecsdimazon.controllers import Constants
+from ecsdiLAB.ecsdimazon.controllers.AgentUtil import build_message
+from ecsdiLAB.ecsdimazon.messages import Ontologies
+from ecsdiLAB.ecsdimazon.messages.PurchaseProductsMessage import PurchaseProductsMessage
 from ecsdiLAB.ecsdimazon.messages.ReturnProductsMessage import ReturnProductsMessage
 from ecsdiLAB.ecsdimazon.messages.SendProductsMessage import SendProductsMessage
 from ecsdiLAB.ecsdimazon.model.BoughtProduct import BoughtProduct
-from ecsdiLAB.ecsdimazon.model.Product import Product
-from ecsdiLAB.ecsdimazon.controllers import AgentUtil
-from ecsdiLAB.ecsdimazon.messages import Ontologies
-from ecsdiLAB.ecsdimazon.messages.PurchaseProductsMessage import PurchaseProductsMessage
 
 app = Flask(__name__)
 context = ECSDIContext()
