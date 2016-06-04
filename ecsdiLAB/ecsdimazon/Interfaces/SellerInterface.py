@@ -51,16 +51,19 @@ def create_product(seller):
 
     try:
         products_graph = Graph().parse(data=response.text, format='xml')
-        """products = Product.from_graph(products_graph)
-        i = 1
-        for product in products:
-            brand_split = str(product.brand).split('#')
-            seller_split = str(product.seller).split('#')
-            print str(i) + ". Codigo de barras: " + str(product.ean) + ", Nombre: " + str(product.name) + ", Marca: " + \
-                  brand_split[len(brand_split) - 1] + ", Vendedor: " + seller_split[
-                      len(seller_split) - 1] + ", Precio: " + str(product.price)
-            i += 1
-            """
+
+        if products_graph.__len__() == 0:
+            print "Ya existe un producto para este ean: " + ean
+        else :
+            products = Product.from_graph(products_graph)
+            for product in products:
+                brand_split = str(product.brand).split('#')
+                seller_split = str(product.seller).split('#')
+                print "Se ha creado el producto:"
+                print "Codigo de barras: " + str(product.ean) + ", Nombre: " + str(product.name) + ", Marca: " + \
+                      brand_split[len(brand_split) - 1] + ", Vendedor: " + seller_split[
+                          len(seller_split) - 1] + ", Precio: " + str(product.price)
+                print "Altura: " + str(product.height) + ", Anchura: " + str(product.width) + ", Peso: " + str(product.weight)
     except:
         print "No se ha podido crear el producto"
 
