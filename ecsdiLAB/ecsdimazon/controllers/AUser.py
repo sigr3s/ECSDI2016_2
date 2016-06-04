@@ -8,6 +8,7 @@ from ecsdiLAB.ecsdimazon.context.ECSDIContext import ECSDIContext
 from ecsdiLAB.ecsdimazon.controllers import AgentUtil
 from ecsdiLAB.ecsdimazon.controllers import Constants
 from ecsdiLAB.ecsdimazon.messages import Ontologies
+from ecsdiLAB.ecsdimazon.messages.ReturnProductsMessage import ReturnProductsMessage
 from ecsdiLAB.ecsdimazon.messages.SearchProductsMessage import SearchProductsMessage
 from ecsdiLAB.ecsdimazon.model.Product import Product
 
@@ -40,6 +41,8 @@ def search_products(graph):
                                                        search_product_price_max,
                                                        search_product_ean)
     return Product.list_to_graph(searched_products).serialize()
+
+
 
 
 @app.route('/comm', methods=['GET', 'POST'])

@@ -81,7 +81,7 @@ class ProductService:
         self.products.add((p, FOAF.Seller, n.__getattr__('#Seller#' + str(product.seller))))
         self.products.serialize(destination='catalog.rdf', format='turtle')
         upload_result = []
-        upload_result.append(Product(product.ean, product.name , Brand(product.brand), product.price,
+        upload_result.append(Product(product.ean, product.name, Brand(product.brand), product.price,
                                      product.weight, product.height, product.width, SellingCompany(product.seller)))
         return upload_result
 
@@ -90,7 +90,7 @@ class ProductService:
         for ean in products:
             uri = n.__getattr__('#Product#' + str(ean))
             if not (uri, None, None) in self.products:
-                return json.dumps(" Error, product is not in the store")
+                return
         soldProducts = []
         for eanP in products:
             query = """SELECT ?x ?ean ?name ?brand ?price ?weight ?height ?width ?seller
@@ -123,3 +123,16 @@ class ProductService:
                                                   Product(ean, name, Brand(brand), price, weight, height, width,
                                                           SellingCompany(seller)), purchaser, priority, payment))
         return soldProducts
+
+    def return_prod(self, uuids, user):
+        n = Namespace(Constants.NAMESPACE)
+        for uuid in uuids:
+            uri = n.__getattr__('#BoughtProduct#' + str(uuid))
+            if not (uri, FOAF.Purchaser, user) in self.purchases:
+                return
+        returnedProducts = []
+        for uuidP in uuids:
+            bp = n.__getattr__('#BoughtProduct#' + str(uuidP))
+            self.purchases.remove((bp, None, None))
+            self.purchases.serialize(destination='purchases.rdf', format='turtle')
+        return None

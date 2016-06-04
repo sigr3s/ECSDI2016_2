@@ -3,6 +3,7 @@ import sys
 from rdflib import Graph
 from ecsdiLAB.ecsdimazon.messages import Ontologies
 from ecsdiLAB.ecsdimazon.controllers import Constants
+from ecsdiLAB.ecsdimazon.messages.ReturnProductsMessage import ReturnProductsMessage
 from ecsdiLAB.ecsdimazon.messages.SearchProductsMessage import SearchProductsMessage
 from ecsdiLAB.ecsdimazon.messages.PurchaseProductsMessage import PurchaseProductsMessage
 from ecsdiLAB.ecsdimazon.controllers.AgentUtil import build_message
@@ -11,6 +12,7 @@ from ecsdiLAB.ecsdimazon.model.User import User
 
 
 def main():
+    return_product()
     option = -1
     while option != 0:
         print "0. Salir"
@@ -44,13 +46,23 @@ def bought_products():
     purchase_url = "http://localhost:" + str(Constants.PORT_APURCHASES) + "/comm"
     direction = raw_input("Direccion de envio: ")
     dictionary_to_eans_request(eans)
-    product_purchase = PurchaseProductsMessage(eans, User("Juan",direction), Constants.PRIORITY_HIGH, Constants.PAYMENT_PAYPAL)
-    response = requests.post(purchase_url, data=build_message(product_purchase.to_graph(), '',
+    product_purchase = PurchaseProductsMessage(eans, User("Juan", direction), Constants.PRIORITY_HIGH,
+                                               Constants.PAYMENT_PAYPAL)
+    response = requests.post(purchase_url, data=build_message(product_purchase.to_graph(), 'BUY',
                                                               Ontologies.PURCHASE_PRODUCT_MESSAGE).serialize(
         format='xml'))
     if response.status_code == 200:
         global cart
         cart = {}
+
+
+def return_product():
+    purchase_url = "http://localhost:" + str(Constants.PORT_APURCHASES) + "/comm"
+    uuids = [6191342809533014444927619513709573502]
+    return_prod = ReturnProductsMessage(uuids, "Juan")
+    response = requests.post(purchase_url, data=build_message(return_prod.to_graph(), 'DELETE',
+                                                              Ontologies.RETURN_PRODUCT_MESSAGE).serialize(
+        format='xml'))
 
 
 def search_product():
@@ -73,7 +85,7 @@ def search_product():
 
     product_search = SearchProductsMessage(ean, name, brand, price_min, price_max)
 
-    response = requests.get(url, data=build_message(product_search.to_graph(), '', Ontologies.SEARCH_PRODUCT_MESSAGE)
+    response = requests.get(url, data=build_message(product_search.to_graph(), 'QUERY', Ontologies.SEARCH_PRODUCT_MESSAGE)
                             .serialize(format='xml'))
 
     try:
@@ -113,7 +125,7 @@ def show_cart():
         for key, value in cart.iteritems():
             print print_product(key) + ". " + str(value) + " unidades"
         option = raw_input("Comprar? y/n: ")
-        if(option == 'y'):
+        if (option == 'y'):
             bought_products()
     else:
         print "No tienes productos en tu cesta"
@@ -124,7 +136,8 @@ def print_product(product):
     brand_split = str(product.brand).split('#')
     seller_split = str(product.seller).split('#')
     return "Codigo de barras: " + str(product.ean) + ", Nombre: " + str(product.name) + ", Marca: " + \
-          brand_split[len(brand_split) - 1] + ", Vendedor: " + seller_split[len(seller_split) - 1] + ", Precio: " + str(product.price)
+           brand_split[len(brand_split) - 1] + ", Vendedor: " + seller_split[
+               len(seller_split) - 1] + ", Precio: " + str(product.price)
 
 
 if __name__ == "__main__":
