@@ -30,17 +30,27 @@ def main():
                 show_cart()
 
 
+def dictionary_to_eans_request(eans):
+    for key, value in cart.iteritems():
+        i = 0
+        ean_of_product = key.ean
+        while i < value:
+            eans.append(str(ean_of_product))
+            i += 1
+
+
 def bought_products():
     eans = []
     purchase_url = "http://localhost:" + str(Constants.PORT_APURCHASES) + "/comm"
-    direction = raw_input("Your direction: ")
-    ean_to_buy = raw_input("Ean of the product you want: ")
-    eans.append(ean_to_buy)
+    direction = raw_input("Direccion de envio: ")
+    dictionary_to_eans_request(eans)
     product_purchase = PurchaseProductsMessage(eans, User("Juan",direction), Constants.PRIORITY_HIGH, Constants.PAYMENT_PAYPAL)
     response = requests.post(purchase_url, data=build_message(product_purchase.to_graph(), '',
                                                               Ontologies.PURCHASE_PRODUCT_MESSAGE).serialize(
         format='xml'))
-    print response
+    if response.status_code == 200:
+        global cart
+        cart = {}
 
 
 def search_product():
@@ -101,7 +111,7 @@ def add_to_cart(lop, products):
 def show_cart():
     if len(cart) != 0:
         for key, value in cart.iteritems():
-            print print_product(key) + ": " + str(value)
+            print print_product(key) + ". " + str(value) + " unidades"
         option = raw_input("Comprar? y/n: ")
         if(option == 'y'):
             bought_products()
