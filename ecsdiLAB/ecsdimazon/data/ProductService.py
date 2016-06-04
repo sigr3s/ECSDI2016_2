@@ -14,9 +14,9 @@ from ecsdiLAB.ecsdimazon.model.SellingCompany import SellingCompany
 class ProductService:
     def __init__(self):
         import os
-        if not os.path.exists('products.rdf'):
-            open('products.rdf', 'w')
-        self.products = Graph().parse("products.rdf", format="turtle")
+        if not os.path.exists('catalog.rdf'):
+            open('catalog.rdf', 'w')
+        self.products = Graph().parse("catalog.rdf", format="turtle")
         if not os.path.exists('catalog.rdf'):
             open('catalog.rdf', 'w')
         self.products_in_catalog = Graph().parse("catalog.rdf", format="turtle")
@@ -69,7 +69,7 @@ class ProductService:
         self.products.add((p, FOAF.Height, Literal(product.height)))
         self.products.add((p, FOAF.Width, Literal(product.width)))
         self.products.add((p, FOAF.Seller, n.__getattr__('#Seller#' + str(product.seller))))
-        self.products.serialize(destination='products.rdf', format='turtle')
+        self.products.serialize(destination='catalog.rdf', format='turtle')
 
     def upload_in_catalog(self, product):
         query = """SELECT ?x ?ean

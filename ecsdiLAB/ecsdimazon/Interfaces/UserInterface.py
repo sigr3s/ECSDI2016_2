@@ -93,7 +93,8 @@ def search_product():
                 add_to_cart(lopSplit, products)
             except ValueError:
                 print "todos los valores han de ser numericos"
-    except:
+    except Exception as ex:
+        print ex
         print "No hay productos que coincidan con los parametros pasados"
     print
 
