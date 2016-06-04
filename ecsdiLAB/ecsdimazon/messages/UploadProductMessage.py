@@ -5,7 +5,7 @@ from ecsdiLAB.ecsdimazon.controllers import Constants
 
 
 class UploadProductMessage:
-    def __init__(self, ean, name, brand, price, height, width, weight):
+    def __init__(self, ean, name, brand, price, height, width, weight, seller):
         self.ean = ean
         self.name = name
         self.brand = brand
@@ -13,6 +13,7 @@ class UploadProductMessage:
         self.height = height
         self.width = width
         self.weight = weight
+        self.seller = seller
 
     def to_graph(self):
         graph = Graph()
@@ -20,11 +21,12 @@ class UploadProductMessage:
         p = n.__getattr__('#Product#' + str(self.ean))
         graph.add((p, FOAF.EAN, Literal(self.ean)))
         graph.add((p, FOAF.Name, Literal(self.name)))
-        graph.add((p, FOAF.Brand, n.__getattr__('#Brand#' + str(self.brand))))
+        graph.add((p, FOAF.Brand, Literal(self.brand)))
         graph.add((p, FOAF.Price, Literal(self.price)))
         graph.add((p, FOAF.Height, Literal(self.height)))
         graph.add((p, FOAF.Width, Literal(self.width)))
         graph.add((p, FOAF.Weight, Literal(self.weight)))
+        graph.add((p, FOAF.Seller, Literal(self.seller)))
         return graph
 
     @classmethod
@@ -37,7 +39,7 @@ class UploadProductMessage:
     @classmethod
     def from_graph(cls, graph):
         query = """SELECT ?x ?ean ?name ?brand ?price
-                            ?height ?width ?weight
+                            ?height ?width ?weight ?seller
             WHERE {
                 ?x ns1:EAN ?ean.
                 ?x ns1:Name ?name.
@@ -46,9 +48,10 @@ class UploadProductMessage:
                 ?x ns1:Height ?height.
                 ?x ns1:Width ?width.
                 ?x ns1:Weight ?weight.
+                ?x ns1:Seller ?seller.
             }"""
         qres = graph.query(query)
-        for p, ean, name, brand, price, height, width, weight in qres:
+        for p, ean, name, brand, price, height, width, weight, seller in qres:
             return UploadProductMessage(
                 ean.toPython(),
                 name.toPython(),
@@ -56,4 +59,5 @@ class UploadProductMessage:
                 price.toPython(),
                 height.toPython(),
                 width.toPython(),
-                weight.toPython(),)
+                weight.toPython(),
+                seller.toPython())

@@ -35,10 +35,11 @@ def upload_product(graph):
     upload_product_height = upm.height
     upload_product_widht = upm.width
     upload_product_weight = upm.weight
+    upload_product_seller = upm.seller
 
     product = Product(upload_product_ean, upload_product_name, upload_product_brand,
                       upload_product_price, upload_product_height, upload_product_widht,
-                      upload_product_weight, upload_product_name)
+                      upload_product_weight, upload_product_seller)
 
     uploaded_product = context.product_service.upload_in_catalog(product)
 

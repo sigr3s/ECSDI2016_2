@@ -9,9 +9,10 @@ from ecsdiLAB.ecsdimazon.model.Product import Product
 
 
 def main():
+    seller = enter_seller_information()
     system_exit = False
     while not system_exit:
-        create_product()
+        create_product(seller)
         correct_response = False
         while not correct_response:
             system_exit = raw_input("Salir? (y/n) ")
@@ -22,8 +23,16 @@ def main():
                     system_exit = False
                 correct_response = True
 
+def enter_seller_information():
+    seller = ""
+    valid_seller = False
+    while not valid_seller:
+        seller = raw_input("seller: ")
+        if seller != "":
+            valid_seller = True
+    return seller
 
-def create_product():
+def create_product(seller):
     url = "http://localhost:" + str(Constants.PORT_AUPDATER) + "/comm"
     ean = raw_input("ean: ")
     if ean is "":
@@ -35,7 +44,7 @@ def create_product():
     width = raw_input("width: ")
     weight = raw_input("weight: ")
 
-    product_upload = UploadProductMessage(ean, name, brand, price, height, width, weight)
+    product_upload = UploadProductMessage(ean, name, brand, price, height, width, weight, seller)
 
     response = requests.get(url, data=build_message(product_upload.to_graph(), '', Ontologies.UPLOAD_PRODUCT_MESSAGE)
                             .serialize(format='xml'))
