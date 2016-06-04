@@ -7,3 +7,10 @@ PORT_AADMIN = 9054
 OUR_SELLING_COMPANY_NAME = 'ECSDIMAZON'
 
 NAMESPACE = 'http://www.owl-ontologies.com/Ontology1463560793.owl'
+
+PAYMENT_PAYPAL = 'paypal'
+PAYMENT_VISA = 'visa'
+
+PRIORITY_LOW = 'low'
+PRIORITY_MEDIUM = 'medium'
+PRIORITY_HIGH = 'high'

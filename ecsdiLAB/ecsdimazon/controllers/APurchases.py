@@ -27,7 +27,7 @@ def hello_world():
 
 def purchase_products(graph):
     ppm = PurchaseProductsMessage.from_graph(graph)
-    products = context.product_service.purchase(ppm.eans)
+    products = context.product_service.purchase(ppm.eans, ppm.user, ppm.priority, ppm.payment)
     return BoughtProduct.list_to_graph(products).serialize()
 
 

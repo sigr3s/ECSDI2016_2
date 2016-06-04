@@ -81,16 +81,16 @@ class ProductService:
         self.products.add((p, FOAF.Seller, n.__getattr__('#Seller#' + str(product.seller))))
         self.products.serialize(destination='catalog.rdf', format='turtle')
 
-    def purchase(self, products):
+    def purchase(self, products, purchaser, priority, payment):
         n = Namespace(Constants.NAMESPACE)
         for ean in products:
             uri = n.__getattr__('#Product#' + str(ean))
             if not (uri, None, None) in self.products:
                 return json.dumps(" Error, product is not in the store")
-        selledProducts = []
+        soldProducts = []
         for eanP in products:
             query = """SELECT ?x ?ean ?name ?brand ?price ?weight ?height ?width ?seller
-        WHERE {{
+            WHERE {{
                 ?x ns1:EAN ?ean.
                 ?x ns1:Name ?name.
                 ?x ns1:Brand ?brand.
@@ -110,8 +110,12 @@ class ProductService:
                 bp = n.__getattr__('#BoughtProduct#' + str(int_uuid))
                 self.purchases.add((bp, FOAF.Uuid, Literal(int_uuid)))
                 self.purchases.add((bp, FOAF.Product, n.__getattr__('#Product#' + str(p))))
+                self.purchases.add((bp, FOAF.Purchaser, purchaser.username))
+                self.purchases.add((bp, FOAF.SendTo, purchaser.direction))
+                self.purchases.add((bp, FOAF.Priority, priority))
+                self.purchases.add((bp, FOAF.Payment, payment))
                 self.purchases.serialize(destination='purchases.rdf', format='turtle')
-                selledProducts.append(BoughtProduct(int_uuid,
-                                                    Product(ean, name, Brand(brand), price, weight, height, width,
-                                                            SellingCompany(seller))))
-        return selledProducts
+                soldProducts.append(BoughtProduct(int_uuid,
+                                                  Product(ean, name, Brand(brand), price, weight, height, width,
+                                                          SellingCompany(seller)), purchaser, priority, payment))
+        return soldProducts

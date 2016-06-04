@@ -1,15 +1,16 @@
 from rdflib import Graph, Literal
 
 from ecsdiLAB.ecsdimazon.controllers import Constants
-from ecsdiLAB.ecsdimazon.model.Brand import Brand
-from ecsdiLAB.ecsdimazon.model.SellingCompany import SellingCompany
 from rdflib.namespace import RDF, Namespace, OWL, FOAF
 
 
 class BoughtProduct:
-    def __init__(self, uuid, product):
+    def __init__(self, uuid, product,purchaser, priority, payment):
         self.uuid = uuid
         self.product = product
+        self.priority = priority
+        self.payment = payment
+        self.purchaser = purchaser
 
     def to_graph(self):
         graph = Graph()
@@ -23,7 +24,12 @@ class BoughtProduct:
         graph.add((p, FOAF.Weight, Literal(self.product.weight)))
         graph.add((p, FOAF.Height, Literal(self.product.height)))
         graph.add((p, FOAF.Width, Literal(self.product.width)))
+        graph.add((p, FOAF.Purcahser, Literal(self.purchaser.username)))
+        graph.add((p, FOAF.SendTo, Literal(self.purchaser.direction)))
+        graph.add((p, FOAF.Payment, Literal(self.payment)))
+        graph.add((p, FOAF.Priority, Literal(self.priority)))
         graph.add((p, FOAF.Seller, n.__getattr__('#Seller#' + str(self.product.seller.name))))
+
         return graph
 
     @classmethod

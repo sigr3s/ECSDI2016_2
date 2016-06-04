@@ -3,10 +3,15 @@ from rdflib.namespace import Namespace, FOAF
 
 from ecsdiLAB.ecsdimazon.controllers import Constants
 
+from ecsdiLAB.ecsdimazon.model.User import User
+
 
 class PurchaseProductsMessage:
-    def __init__(self, eans):
+    def __init__(self, eans, user, priority, payment):
         self.eans = eans
+        self.user = user
+        self.priority = priority
+        self.payment = payment
 
     def to_graph(self):
         graph = Graph()
@@ -14,9 +19,11 @@ class PurchaseProductsMessage:
         for ean in self.eans:
             p = n.__getattr__('#Product#' + str(ean))
             graph.add((p, FOAF.EAN, Literal(ean)))
-
+            graph.add((p, FOAF.Purchaser, Literal(self.user.username)))
+            graph.add((p, FOAF.SendTo, Literal(self.user.direction)))
+            graph.add((p, FOAF.Priority, Literal(self.priority)))
+            graph.add((p, FOAF.Payment, Literal(self.payment)))
         return graph
-
 
     @classmethod
     def list_to_graph(cls, spms):
@@ -27,14 +34,26 @@ class PurchaseProductsMessage:
 
     @classmethod
     def from_graph(cls, graph):
-        query = """SELECT ?x ?ean
+        query = """SELECT ?x ?ean ?purchaser ?send ?priority ?payment
             WHERE {
                 ?x ns1:EAN ?ean.
+                ?x ns1:Purchaser ?purchaser.
+                ?x ns1:SendTo ?send.
+                ?x ns1:Priority ?priority.
+                ?x ns1:Payment ?payment
             }
         """
         qres = graph.query(query)
         search_res = []
-        for p, ean in qres:
-           search_res.append(ean)
-        pm = PurchaseProductsMessage(search_res)
+        send = None
+        priority = None
+        payment = None
+        purchaser = None;
+        for p, ean, purchaser, send, priority, payment in qres:
+            search_res.append(ean)
+            purchaser = purchaser
+            send = send
+            payment = payment
+            priority = priority
+        pm = PurchaseProductsMessage(search_res, User(purchaser, send), priority, payment)
         return pm

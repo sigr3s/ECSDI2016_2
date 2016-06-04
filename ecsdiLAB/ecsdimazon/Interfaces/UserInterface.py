@@ -7,6 +7,7 @@ from ecsdiLAB.ecsdimazon.messages.SearchProductsMessage import SearchProductsMes
 from ecsdiLAB.ecsdimazon.messages.PurchaseProductsMessage import PurchaseProductsMessage
 from ecsdiLAB.ecsdimazon.controllers.AgentUtil import build_message
 from ecsdiLAB.ecsdimazon.model.Product import Product
+from ecsdiLAB.ecsdimazon.model.User import User
 
 
 def main():
@@ -31,9 +32,10 @@ def main():
 def bought_products():
     eans = []
     purchase_url = "http://localhost:" + str(Constants.PORT_APURCHASES) + "/comm"
+    direction = raw_input("Your direction: ")
     ean_to_buy = raw_input("Ean of the product you want: ")
     eans.append(ean_to_buy)
-    product_purchase = PurchaseProductsMessage(eans)
+    product_purchase = PurchaseProductsMessage(eans, User("Juan",direction), Constants.PRIORITY_HIGH, Constants.PAYMENT_PAYPAL)
     response = requests.post(purchase_url, data=build_message(product_purchase.to_graph(), '',
                                                               Ontologies.PURCHASE_PRODUCT_MESSAGE).serialize(
         format='xml'))
