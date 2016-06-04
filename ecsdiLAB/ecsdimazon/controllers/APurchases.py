@@ -5,6 +5,7 @@ from rdflib import Graph
 
 from ecsdiLAB.ecsdimazon.context.ECSDIContext import ECSDIContext
 from ecsdiLAB.ecsdimazon.controllers import Constants
+from ecsdiLAB.ecsdimazon.model.BoughtProduct import BoughtProduct
 from ecsdiLAB.ecsdimazon.model.Product import Product
 from ecsdiLAB.ecsdimazon.controllers import AgentUtil
 from ecsdiLAB.ecsdimazon.messages import Ontologies
@@ -27,13 +28,14 @@ def hello_world():
 def purchase_products(graph):
     ppm = PurchaseProductsMessage.from_graph(graph)
     products = context.product_service.purchase(ppm.eans)
-    return json.dumps(products)
+    return BoughtProduct.list_to_graph(products).serialize()
 
 
 @app.route('/comm', methods=['POST'])
 def comm():
-    ontology = AgentUtil.ontology_of_message(request.data)
-    routings[ontology](Graph().parse(data=request.data))
+    graph = Graph().parse(data=request.data, format='xml')
+    ontology = AgentUtil.ontology_of_message(graph)
+    return routings[ontology](graph)
 
 
 routings = {
@@ -41,4 +43,4 @@ routings = {
 }
 
 if __name__ == '__main__':
-    app.run(port=Constants.PORT_APURCHASES)
+    app.run(port=Constants.PORT_APURCHASES,debug=True)

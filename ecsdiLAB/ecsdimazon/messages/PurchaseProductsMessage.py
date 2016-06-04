@@ -12,8 +12,8 @@ class PurchaseProductsMessage:
         graph = Graph()
         n = Namespace(Constants.NAMESPACE)
         for ean in self.eans:
-            p = n.__getattr__('#Product#' + str(self.ean))
-            graph.add((p, FOAF.EAN, Literal(self.ean)))
+            p = n.__getattr__('#Product#' + str(ean))
+            graph.add((p, FOAF.EAN, Literal(ean)))
 
         return graph
 
