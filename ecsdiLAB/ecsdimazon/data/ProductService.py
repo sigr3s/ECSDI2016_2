@@ -80,6 +80,10 @@ class ProductService:
         self.products.add((p, FOAF.Width, Literal(product.width)))
         self.products.add((p, FOAF.Seller, n.__getattr__('#Seller#' + str(product.seller))))
         self.products.serialize(destination='catalog.rdf', format='turtle')
+        upload_result = []
+        upload_result.append(Product(product.ean, product.name , Brand(product.brand), product.price,
+                                     product.weight, product.height, product.width, SellingCompany(product.seller)))
+        return upload_result
 
     def purchase(self, products, purchaser, priority, payment):
         n = Namespace(Constants.NAMESPACE)
