@@ -25,7 +25,7 @@ class SendProductsMessage:
             graph.add((p, FOAF.Weight, Literal(bought_product.product.weight)))
             graph.add((p, FOAF.Height, Literal(bought_product.product.height)))
             graph.add((p, FOAF.Width, Literal(bought_product.product.width)))
-            graph.add((p, FOAF.Purcahser, Literal(bought_product.purchaser.username)))
+            graph.add((p, FOAF.Purchaser, Literal(bought_product.purchaser.username)))
             graph.add((p, FOAF.SendTo, Literal(bought_product.purchaser.direction)))
             graph.add((p, FOAF.Payment, Literal(bought_product.payment)))
             graph.add((p, FOAF.Priority, Literal(bought_product.priority)))
