@@ -9,22 +9,23 @@ from ecsdiLAB.ecsdimazon.model.Product import Product
 
 
 def main():
-    system_exit = False
-    while not system_exit:
-        search_product()
-        correct_response = False
-        while not correct_response:
-            system_exit = raw_input("Salir? (y/n) ")
-            if system_exit == 'y' or system_exit == 'n':
-                if system_exit == 'y':
-                    system_exit = True
-                else:
-                    system_exit = False
-                correct_response = True
-
-    """
-        TODO seleccionar producto para comprar
-    """
+    option = -1
+    while option != 0:
+        print "0. Salir"
+        print "1. Buscar productos"
+        print "2. Ir a la cesta de la compra"
+        option = raw_input("Escoge una opcion: ")
+        try:
+            option = int(option)
+        except ValueError:
+            pass
+        if option not in [0, 1, 2]:
+            print "Opcion incorrecta"
+        else:
+            if option == 1:
+                search_product()
+            if option == 2:
+                show_cart()
 
 
 def search_product():
@@ -55,13 +56,54 @@ def search_product():
         products = Product.from_graph(products_graph)
         i = 1
         for product in products:
-            brand_split = str(product.brand).split('#')
-            seller_split = str(product.seller).split('#')
-            print str(i) + ". Codigo de barras: " + str(product.ean) + ", Nombre: " + str(product.name) + ", Marca: " + brand_split[len(brand_split)-1] + ", Vendedor: " + seller_split[len(seller_split)-1] + ", Precio: " + str(product.price)
+            print str(i) + ". " + print_product(product)
             i += 1
+        print
+        list_of_products = raw_input("Introduce los productos que quieres o dejalo en blanco si no quieres nada de la lista: ")
+        if list_of_products != "":
+            lopSplit = list_of_products.strip().split(" ")
+            try:
+                i = 0
+                for prod in lopSplit:
+                    lopSplit[i] = int(prod) - 1
+                    i += 1
+                add_to_cart(lopSplit, products)
+            except ValueError:
+                print "todos los valores han de ser numericos"
     except:
         print "No hay productos que coincidan con los parametros pasados"
+    print
+
+
+def add_to_cart(lop, products):
+    for prod_num in lop:
+        try:
+            how_many = cart[products[prod_num]]
+            cart[products[prod_num]] = how_many + 1
+        except:
+            cart[products[prod_num]] = 1
+
+
+def show_cart():
+    for key, value in cart.iteritems():
+        print print_product(key) + ": " + str(value)
+    option = raw_input("Comprar? y/n")
+    if(option == 'y'):
+        purchase()
+
+
+def purchase():
+    """todo"""
+
+
+def print_product(product):
+    brand_split = str(product.brand).split('#')
+    seller_split = str(product.seller).split('#')
+    return "Codigo de barras: " + str(product.ean) + ", Nombre: " + str(product.name) + ", Marca: " + \
+          brand_split[len(brand_split) - 1] + ", Vendedor: " + seller_split[len(seller_split) - 1] + ", Precio: " + str(product.price)
 
 
 if __name__ == "__main__":
+    global cart
+    cart = {}
     main()
