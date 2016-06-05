@@ -3,6 +3,8 @@ from rdflib import Graph, Literal
 from ecsdiLAB.ecsdimazon.controllers import Constants
 from rdflib.namespace import RDF, Namespace, OWL, FOAF
 
+from ecsdiLAB.ecsdimazon.model.Brand import Brand
+
 
 class BoughtProductResponse:
     def __init__(self, uuid, ean, name, brand, price, seller, delivery_date, sender):
@@ -36,3 +38,31 @@ class BoughtProductResponse:
             graph = graph + product.to_graph()
         return graph
 
+    @classmethod
+    def from_graph(cls, graph):
+        query = """SELECT ?x ?uuid ?ean ?name ?brand ?price ?seller ?sender ?deliveryDate
+               WHERE {
+                   ?x ns1:Uuid ?uuid.
+                   ?x ns1:EAN ?ean.
+                   ?x ns1:Name ?name.
+                   ?x ns1:Brand ?brand.
+                   ?x ns1:Price ?price.
+                   ?x ns1:Seller ?seller.
+                   ?x ns1:Sender ?sender.
+                   ?x ns1:DeliveryDate ?deliveryDate.
+               }
+           """
+        qres = graph.query(query)
+        search_res = []
+        for bpr, uuid, ean, name, brand, price, seller, sender, deliveryDate in qres:
+            search_res.append(BoughtProductResponse(
+                uuid.toPython(),
+                ean.toPython(),
+                name.toPython(),
+                Brand(brand.toPython()),
+                price.toPython(),
+                seller.toPython(),
+                deliveryDate.toPython(),
+                sender.toPython()
+            ))
+        return search_res

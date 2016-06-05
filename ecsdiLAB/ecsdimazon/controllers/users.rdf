@@ -4,6 +4,12 @@
 @prefix xml: <http://www.w3.org/XML/1998/namespace> .
 @prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
 
+<http://www.owl-ontologies.com/Ontology1463560793.owl#User#Kamitachi> ns1:Direction "Martorell" ;
+    ns1:Username "Kamitachi" .
+
+<http://www.owl-ontologies.com/Ontology1463560793.owl#User#Kmaitachi> ns1:Direction "qwe" ;
+    ns1:Username "Kmaitachi" .
+
 <http://www.owl-ontologies.com/Ontology1463560793.owl#User#Oriol> ns1:Direction "WD" ;
     ns1:Username "Oriol" .
 

@@ -9,6 +9,7 @@ from ecsdiLAB.ecsdimazon.model.SellingCompany import SellingCompany
 
 
 class BoughtProduct:
+
     def __init__(self, uuid, product, purchaser, priority, payment, delivery_date, sender):
         self.uuid = uuid
         self.product = product
@@ -48,34 +49,37 @@ class BoughtProduct:
 
     @classmethod
     def from_graph(cls, graph):
-        query = """SELECT ?x ?weight ?seller ?sendto ?payment ?brand ?priority ?uuid ?price ?ean ?width ?height ?name ?purchaser ?date ?sender
+        query = """SELECT ?x ?uuid ?ean ?name ?brand ?price ?weight ?height ?width ?purcahser ?sendto ?payment ?priority ?seller ?deliveryDate ?sender
             WHERE {
+                ?x ns1:Uuid ?uuid.
+                ?x ns1:EAN ?ean.
+                ?x ns1:Name ?name.
+                ?x ns1:Brand ?brand.
+                ?x ns1:Price ?price.
                 ?x ns1:Weight ?weight.
-                ?x ns1:Seller ?seller.
+                ?x ns1:Height ?height.
+                ?x ns1:Width ?width.
+                ?x ns1:Purcahser ?purcahser.
                 ?x ns1:SendTo ?sendto.
                 ?x ns1:Payment ?payment.
-                ?x ns1:Brand ?brand.
                 ?x ns1:Priority ?priority.
-                ?x ns1:Uuid ?uuid.
-                ?x ns1:Price ?price.
-                ?x ns1:EAN ?ean.
-                ?x ns1:Width ?width.
-                ?x ns1:Height ?height.
-                ?x ns1:Name ?name.
-                ?x ns1:Purchaser ?purchaser.
-                ?x ns1:DeliveryDate ?date.
+                ?x ns1:Seller ?seller.
+                ?x ns1:DeliveryDate ?deliveryDate.
                 ?x ns1:Sender ?sender.
             }
         """
         qres = graph.query(query)
         print len(qres)
         search_res = []
-        for bp, weight, seller, sendto, payment, brand, priority, uuid, price, ean, width, height, name, purchaser, date, sender in qres:
+        for bp, uuid, ean, name, brand, price, weight, height, width, purcahser, sendto, payment, priority, seller, deliveryDate, sender in qres:
             search_res.append(BoughtProduct(
                 uuid.toPython(),
                 Product(ean, name, Brand(brand.toPython()), price, weight, height, width,
                         SellingCompany(seller.toPython())),
-                purchaser.toPython(),
+                purcahser.toPython(),
                 priority.toPython(),
-                payment.toPython(), date, sender))
+                payment.toPython(),
+                deliveryDate.toPython(),
+                sender.toPython()
+            ))
         return search_res
