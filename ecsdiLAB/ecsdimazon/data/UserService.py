@@ -30,7 +30,7 @@ class UserService:
         uri = n.__getattr__('#User#' + str(user.username))
         if not (uri, None, None) in self.users:
             self.users.add((uri, FOAF.Username, user.username))
-            self.users.add((uri, FOAF.Direction, user.username))
+            self.users.add((uri, FOAF.Direction, user.direction))
         else:
             self.users.remove((uri, FOAF.Direction, None))
             self.users.add((uri, FOAF.Direction, user.direction))

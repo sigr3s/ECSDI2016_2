@@ -53,8 +53,8 @@ def user_prodcuts(graph):
 
 def user(graph):
     spm = UserMessage.from_graph(graph)
-    context.user_service.register_or_update(spm.user)
-    return None
+    user = context.user_service.register_or_update(spm.user)
+    return user.user_to_graph(user).serialize()
 
 
 @app.route('/comm', methods=['GET', 'POST'])

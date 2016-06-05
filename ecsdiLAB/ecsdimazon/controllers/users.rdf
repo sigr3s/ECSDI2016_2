@@ -3,3 +3,7 @@
 @prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
 @prefix xml: <http://www.w3.org/XML/1998/namespace> .
 @prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+
+<http://www.owl-ontologies.com/Ontology1463560793.owl#User#sigr3s> ns1:Direction "focfollet" ;
+    ns1:Username "sigr3s" .
+

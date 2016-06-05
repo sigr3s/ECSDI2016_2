@@ -17,9 +17,8 @@ class User:
         return graph
 
     @classmethod
-    def list_to_graph(cls, users):
+    def user_to_graph(cls, user):
         graph = Graph()
-        for user in users:
-            graph = graph + user.to_graph()
+        graph = user.to_graph()
         return graph
 
