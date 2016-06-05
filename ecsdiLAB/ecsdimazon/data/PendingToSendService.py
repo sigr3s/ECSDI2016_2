@@ -12,7 +12,7 @@ class PendingToSendService:
     PENDING_FILE_NAME = 'pending.rdf'
 
     def __init__(self, directory_uri):
-        self.directory_uri = directory_uri
+        self.directory_uri = directory_uri+"/comm"
         import os
         if not os.path.exists(self.PENDING_FILE_NAME):
             open(self.PENDING_FILE_NAME, 'w')
@@ -34,7 +34,7 @@ class PendingToSendService:
     def __ask_for_senders__(self):
         data = AgentUtil.build_message(Graph(), FIPAACLPerformatives.REQUEST, Ontologies.SENDERS_LIST_REQUEST)
         r = requests.post(self.directory_uri, data.serialize())
-        return Graph().parse(r.text)
+        return Graph().parse(data=r.text)
 
     def __negotiate__(self, senders_graph):
         query = """SELECT ?x ?name ?negotiationUri
@@ -51,7 +51,7 @@ class PendingToSendService:
             r = requests.post(negotiation_uri, data=AgentUtil.build_message(Graph(),
                                                                             FIPAACLPerformatives.REQUEST,
                                                                             Ontologies.SENDERS_PRICE_REQUEST))
-            ppk = AgentUtil.field_of_message(Graph().parse(r.text), FOAF.PricePerKilo).toPython()
+            ppk = AgentUtil.field_of_message(Graph().parse(data=r.text), FOAF.PricePerKilo).toPython()
             print 'Price of {} is {}'.format(name.toPython(), ppk)
             all_senders_with_price.append((s, name, negotiation_uri, ppk))
         if not all_senders_with_price:
@@ -68,7 +68,7 @@ class PendingToSendService:
             r = requests.post(negotiation_uri, data=AgentUtil.build_message(counter_offer_graph,
                                                                             FIPAACLPerformatives.REQUEST,
                                                                             Ontologies.SENDERS_NEGOTIATION_REQUEST))
-            ng = Graph().parse(r.text)
+            ng = Graph().parse(data=r.text)
             if AgentUtil.performative_of_message(ng) == FIPAACLPerformatives.AGREE:
                 all_senders_with_price_negotiated.append((s, name, negotiation_uri, counter_offer_price))
             else:
@@ -96,7 +96,7 @@ class PendingToSendService:
             performative,
             ontology
         ).serialize())
-        final_price = AgentUtil.field_of_message(Graph().parse(r.text), FOAF.TotalPrice).toPython()
+        final_price = AgentUtil.field_of_message(Graph().parse(data=r.text), FOAF.TotalPrice).toPython()
         # we assume the sender comes and gets whatever wherever
         self.pending = Graph()  # no longer pending
         return "The final price of sending all pending products was {}".format(final_price)
