@@ -26,4 +26,4 @@ if __name__ == '__main__':
         exit(-1)
     if not agent:
         agent = AgentSender(Sender('SehOor', sys.argv[1]), sys.argv[2])
-    app.run(port=Constants.PORT_SEHOOR_SENDER)
+    app.run(port=Constants.PORT_SEHOOR_SENDER, debug=True)
