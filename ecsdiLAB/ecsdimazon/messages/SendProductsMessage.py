@@ -30,6 +30,8 @@ class SendProductsMessage:
             graph.add((p, FOAF.Payment, Literal(bought_product.payment)))
             graph.add((p, FOAF.Priority, Literal(bought_product.priority)))
             graph.add((p, FOAF.Seller, n.__getattr__('#Seller#' + str(bought_product.product.seller.name))))
+            graph.add((p, FOAF.DeliveryDate, None))
+            graph.add((p, FOAF.Sender, None))
         return graph
 
     @classmethod
@@ -41,13 +43,13 @@ class SendProductsMessage:
 
     @classmethod
     def from_graph(cls, graph):
-        query = """SELECT ?x ?uuid ?ean ?name ?brand ?price ?weight ?height ?width ?seller ?purchaser ?send ?priority ?payment
+        query = """SELECT ?x ?uuid ?ean ?name ?brand ?price ?weight ?height ?width ?seller ?purchaser ?send ?priority ?payment ?date ?sender
             WHERE {
                 ?x ns1:Uuid ?uuid.
                 ?x ns1:EAN ?ean.
-                ?x ns1:EAN ?ean.
                 ?x ns1:Name ?name.
                 ?x ns1:Brand ?brand.
+                ?x ns1:Price ?price.
                 ?x ns1:Weight ?weight.
                 ?x ns1:Height ?height.
                 ?x ns1:Width ?width.
@@ -56,13 +58,15 @@ class SendProductsMessage:
                 ?x ns1:SendTo ?send.
                 ?x ns1:Priority ?priority.
                 ?x ns1:Payment ?payment.
+                ?x ns1:DeliveryDate ?date.
+                ?x ns1:Sender ?sender.
             }
         """
         qres = graph.query(query)
         search_res = []
-        for p, uuid, ean, name, brand, price, weight, height, width, seller, purchaser, send, priority, payment in qres:
+        for p, uuid, ean, name, brand, price, weight, height, width, seller, purchaser, send, priority, payment, date, sender in qres:
             bought_product = BoughtProduct(uuid, Product(ean, name, brand, price, weight, height, width, seller),
-                                           purchaser, priority, payment)
+                                           purchaser, priority, payment, date, sender)
             search_res.append(bought_product)
         pm = SendProductsMessage(search_res)
         return pm

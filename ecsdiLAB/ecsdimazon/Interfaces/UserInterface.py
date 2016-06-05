@@ -7,12 +7,14 @@ from ecsdiLAB.ecsdimazon.messages.ReturnProductsMessage import ReturnProductsMes
 from ecsdiLAB.ecsdimazon.messages.SearchProductsMessage import SearchProductsMessage
 from ecsdiLAB.ecsdimazon.messages.PurchaseProductsMessage import PurchaseProductsMessage
 from ecsdiLAB.ecsdimazon.controllers.AgentUtil import build_message
+from ecsdiLAB.ecsdimazon.messages.UserMessage import UserMessage
 from ecsdiLAB.ecsdimazon.model.BoughtProduct import BoughtProduct
 from ecsdiLAB.ecsdimazon.model.Product import Product
 from ecsdiLAB.ecsdimazon.model.User import User
 
 
 def main():
+    user_purchases()
     option = -1
     while option != 0:
         print "0. Salir"
@@ -43,6 +45,14 @@ def dictionary_to_eans_request(eans):
             eans.append(str(ean_of_product))
             i += 1
 
+def user_purchases():
+    users = "http://localhost:" + str(Constants.PORT_AUSER) + "/comm"
+    user_msg = UserMessage( User("sigr3s", "foc follet"))
+    response = requests.post(users, data=build_message(user_msg.to_graph(), 'QUERY',
+
+                                                              Ontologies.USER_PRODUCTS_MESSAGE).serialize(
+        format='xml'))
+    print response
 
 def purchase_products():
     eans = []

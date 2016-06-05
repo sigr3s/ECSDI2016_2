@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 @prefix ns1: <http://xmlns.com/foaf/0.1/> .
 @prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
 @prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
@@ -93,4 +94,3 @@
     ns1:Seller <http://www.owl-ontologies.com/Ontology1463560793.owl#Seller#ECSDIMAZON> ;
     ns1:Weight 0e+00 ;
     ns1:Width 0e+00 .
-
