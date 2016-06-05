@@ -27,9 +27,10 @@ class PendingToSendService:
     def time_to_send(self):
         senders_graph = self.__ask_for_senders__()
         cheapest_sender = self.__negotiate__(senders_graph)
-        self.__send_products__(cheapest_sender)
+        final_price_message = self.__send_products__(cheapest_sender)
         self.pending = Graph()
         self.pending.serialize(destination=self.PENDING_FILE_NAME, format='turtle')
+        return final_price_message
 
     def __ask_for_senders__(self):
         data = AgentUtil.build_message(Graph(), FIPAACLPerformatives.REQUEST, Ontologies.SENDERS_LIST_REQUEST)
