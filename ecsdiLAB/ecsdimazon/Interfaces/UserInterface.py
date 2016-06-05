@@ -115,7 +115,7 @@ def search_product():
     brand = ''
     price_min = 0
     price_max = sys.float_info.max
-    if ean is "":
+    if ean == "":
         ean = None
         name = raw_input("Nombre: ")
         brand = raw_input("Marca: ")

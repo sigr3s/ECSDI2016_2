@@ -8,7 +8,7 @@ from ecsdiLAB.ecsdimazon.context.ECSDIContext import ECSDIContext
 from ecsdiLAB.ecsdimazon.controllers import AgentUtil
 from ecsdiLAB.ecsdimazon.controllers import Constants
 from ecsdiLAB.ecsdimazon.controllers.AgentUtil import build_message
-from ecsdiLAB.ecsdimazon.messages import Ontologies
+from ecsdiLAB.ecsdimazon.messages import Ontologies, FIPAACLPerformatives
 from ecsdiLAB.ecsdimazon.messages.PurchaseProductsMessage import PurchaseProductsMessage
 from ecsdiLAB.ecsdimazon.messages.ReturnProductsMessage import ReturnProductsMessage
 from ecsdiLAB.ecsdimazon.messages.SendProductsMessage import SendProductsMessage
@@ -38,7 +38,7 @@ def purchase_products(graph):
     products = context.product_service.purchase(ppm.eans, ppm.user, ppm.priority, ppm.payment)
     product_send = SendProductsMessage(products)
     send_url = "http://localhost:" + str(Constants.PORT_ASENDER) + "/comm"
-    requests.post(send_url, data=build_message(product_send.to_graph(), '',
+    requests.post(send_url, data=build_message(product_send.to_graph(), FIPAACLPerformatives.REQUEST,
                                                Ontologies.SEND_PRODUCTS_MESSAGE).serialize(
         format='xml'))
     return BoughtProduct.list_to_graph(products).serialize(format='xml')
