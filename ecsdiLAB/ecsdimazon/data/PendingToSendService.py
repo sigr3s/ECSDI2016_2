@@ -73,9 +73,9 @@ class PendingToSendService:
             else:
                 all_senders_with_price_negotiated.append((s, name, negotiation_uri, ppk))
 
-        min_price_negotiated = min(map(lambda x: x[3], all_senders_with_price))
+        min_price_negotiated = min(map(lambda x: x[3], all_senders_with_price_negotiated))
         selected_senders = filter(lambda x: x[3] == min_price_negotiated, all_senders_with_price_negotiated)
-        if len(all_senders_with_price) == 1:
+        if len(selected_senders) == 1:
             return selected_senders[0]
         else:
             return random.choice(selected_senders)
