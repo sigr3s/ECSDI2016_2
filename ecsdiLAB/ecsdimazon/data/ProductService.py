@@ -1,5 +1,6 @@
 import uuid
 
+import datetime
 from rdflib import Graph, Literal
 from rdflib.namespace import RDF, Namespace, OWL, FOAF
 
@@ -150,13 +151,20 @@ class ProductService:
         n = Namespace(Constants.NAMESPACE)
         uri = n.__getattr__('#BoughtProduct#' + str(uuid))
         if not (uri, FOAF.Purchaser, user) in self.purchases:
-            return
-        returnedProducts = []
-        for uuidP in uuids:
-            bp = n.__getattr__('#BoughtProduct#' + str(uuidP))
-            self.purchases.remove((bp, None, None))
-            self.purchases.serialize(destination='purchases.rdf', format='turtle')
-        return None
+            return build_message(Graph(), FIPAACLPerformatives.REFUSE, Ontologies.RETURN_PRODUCT_MESSAGE).serialize()
+        if reason == Constants.REASON_NON_SATISFACTORY:
+            for s, p, o in self.purchases.triples(uri, FOAF.DeliveryDate, None):
+                delivery_date = datetime.datetime.strptime(o, "%Y-%m-%dT%H:%M:%S.%f")
+                if (datetime.datetime.now() - datetime.timedelta(days=15)) < delivery_date:
+                    return build_message(Graph(), FIPAACLPerformatives.REFUSE, Ontologies.RETURN_PRODUCT_MESSAGE).serialize()
+        for s,p,o in self.purchases.triples((uri,FOAF.Product,None)):
+            self.returns.add((uri, FOAF.Product, Literal(o)))
+        self.returns.add((uri, FOAF.Reason, Literal(reason)))
+        self.returns.add((uri, FOAF.Purchaser, Literal(user)))
+        self.returns.serialize(destination='returns.rdf', format='turtle')
+        self.purchases.remove((uri, None, None))
+        self.purchases.serialize(destination='purchases.rdf', format='turtle')
+        return build_message(Graph(), FIPAACLPerformatives.AGREE, Ontologies.RETURN_PRODUCT_MESSAGE).serialize()
 
     def sent_products(self, graph):
         for s, p, o in graph.triples((None, FOAF.Uuid, None)):
