@@ -4,6 +4,6 @@
 @prefix xml: <http://www.w3.org/XML/1998/namespace> .
 @prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
 
-<http://www.owl-ontologies.com/Ontology1463560793.owl#User#sigr3s> ns1:Direction "focfollet" ;
+<http://www.owl-ontologies.com/Ontology1463560793.owl#User#sigr3s> ns1:Direction " nueva dreccion" ;
     ns1:Username "sigr3s" .
 

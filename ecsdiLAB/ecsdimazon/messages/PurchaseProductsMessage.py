@@ -1,3 +1,5 @@
+import uuid
+
 from rdflib import Graph, Literal
 from rdflib.namespace import Namespace, FOAF
 
@@ -17,7 +19,9 @@ class PurchaseProductsMessage:
         graph = Graph()
         n = Namespace(Constants.NAMESPACE)
         for ean in self.eans:
-            p = n.__getattr__('#Product#' + str(ean))
+            uuid_guiones = uuid.uuid4()
+            int_uuid = uuid_guiones.int
+            p = n.__getattr__('#Product#' + str(int_uuid))
             graph.add((p, FOAF.EAN, Literal(ean)))
             graph.add((p, FOAF.Purchaser, Literal(self.user.username)))
             graph.add((p, FOAF.SendTo, Literal(self.user.direction)))
@@ -48,7 +52,7 @@ class PurchaseProductsMessage:
         send = None
         priority = None
         payment = None
-        purchaser = None;
+        purchaser = None
         for p, ean, purchaser, send, priority, payment in qres:
             search_res.append(ean)
             purchaser = purchaser
