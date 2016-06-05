@@ -3,7 +3,9 @@ from rdflib import Graph, Literal
 from ecsdiLAB.ecsdimazon.controllers import Constants
 from rdflib.namespace import RDF, Namespace, OWL, FOAF
 
+from ecsdiLAB.ecsdimazon.model.Brand import Brand
 from ecsdiLAB.ecsdimazon.model.Product import Product
+from ecsdiLAB.ecsdimazon.model.SellingCompany import SellingCompany
 
 
 class BoughtProduct:
@@ -43,31 +45,31 @@ class BoughtProduct:
 
     @classmethod
     def from_graph(cls, graph):
-        query = """SELECT ?payment ?price ?priority ?ean ?brand ?width ?weight ?height ?name ?seller ?purchaser ?uuid ?sendto
+        query = """SELECT ?x ?weight ?seller ?sendto ?payment ?brand ?priority ?uuid ?price ?ean ?width ?height ?name ?purcahser
             WHERE {
-                ?x ns1:EAN ?ean.
-                ?x ns1:Name ?name.
-                ?x ns1:Brand ?brand.
-                ?x ns1:Price ?price.
                 ?x ns1:Weight ?weight.
-                ?x ns1:Height ?height.
-                ?x ns1:Width ?width.
                 ?x ns1:Seller ?seller.
-                ?x ns1:Priority ?priority
-                ?x ns1:Purchaser ?purchaser
-                ?x ns1:Seller ?seller
-                ?x ns1:SendTo ?sendto
-                ?x ns1:Uuid ?uuid
-                ?x ns1:Payment ?payment
+                ?x ns1:SendTo ?sendto.
+                ?x ns1:Payment ?payment.
+                ?x ns1:Brand ?brand.
+                ?x ns1:Priority ?priority.
+                ?x ns1:Uuid ?uuid.
+                ?x ns1:Price ?price.
+                ?x ns1:EAN ?ean.
+                ?x ns1:Width ?width.
+                ?x ns1:Height ?height.
+                ?x ns1:Name ?name.
+                ?x ns1:Purchaser ?purcahser
             }
         """
         qres = graph.query(query)
+        print len(qres)
         search_res = []
-        for p, payment, price, priority, ean, brand, width, weight, height, name, seller, purchaser, uuid, send_to in qres:
+        for bp, weight, seller, sendto, payment, brand, priority, uuid, price, ean, width, height, name, purcahser in qres:
             search_res.append(BoughtProduct(
                 uuid.toPython(),
-                Product(ean, name, brand, price, weight, height, width, seller),
-                purchaser.toPython(),
+                Product(ean, name, Brand(brand.toPython()), price, weight, height, width, SellingCompany(seller.toPython())),
+                purcahser.toPython(),
                 priority.toPython(),
                 payment.toPython()))
         return search_res

@@ -53,11 +53,10 @@ def purchase_products():
 
     product_purchase = PurchaseProductsMessage(eans, User(username,direction), Constants.PRIORITY_HIGH, Constants.PAYMENT_PAYPAL)
     response = requests.post(purchase_url, data=build_message(product_purchase.to_graph(), 'BUY',
-                                                              Ontologies.PURCHASE_PRODUCT_MESSAGE).serialize(
-                                                              format='xml'))
+                                                              Ontologies.PURCHASE_PRODUCT_MESSAGE).serialize(format='xml'))
 
+    ticket = Graph().parse(data=response.text)
     print response.text
-    ticket = Graph().parse(data=response.text, format='xml')
     print BoughtProduct.from_graph(ticket)
     if response.status_code == 200:
         global cart
