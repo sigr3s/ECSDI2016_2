@@ -6,6 +6,7 @@ from rdflib import Graph, Namespace, Literal
 from rdflib.namespace import FOAF
 
 from ecsdiLAB.ecsdimazon.controllers import AgentUtil, Constants
+from ecsdiLAB.ecsdimazon.controllers.AgentUtil import ACL
 from ecsdiLAB.ecsdimazon.messages import FIPAACLPerformatives, Ontologies
 
 
@@ -27,6 +28,8 @@ class PendingToSendService:
         self.pending = Graph().parse(self.PENDING_FILE_NAME, format="turtle")
 
     def send_products(self, graph):
+        graph.remove((None, ACL.ontology, None))
+        graph.remove((None, ACL.performative, None))
         new_pending = self.pending + graph
         self.pending = new_pending
         self.pending.serialize(destination=self.PENDING_FILE_NAME, format='turtle')
