@@ -73,7 +73,9 @@ def user_purchases():
         products_graph = Graph().parse(data=response.text, format='xml')
         products = BoughtProductResponse.from_graph(products_graph)
         for product in products:
-            print "Nombre: " + product.name + ", Precio: " + str(product.price) + ", uuid: " + str(product.uuid)
+            print "Nombre: " + product.name + ", Precio: " + str(product.price) + ", uuid: " + str(
+                product.uuid) + ", Repartidor: " + str(product.sender) + ", Fecha de entrega: " + str(
+                product.delivery_date)
     except:
         print "No has comprado ningun producto aun."
     print
