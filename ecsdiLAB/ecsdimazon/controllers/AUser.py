@@ -10,6 +10,8 @@ from ecsdiLAB.ecsdimazon.controllers import Constants
 from ecsdiLAB.ecsdimazon.messages import Ontologies
 from ecsdiLAB.ecsdimazon.messages.ReturnProductsMessage import ReturnProductsMessage
 from ecsdiLAB.ecsdimazon.messages.SearchProductsMessage import SearchProductsMessage
+from ecsdiLAB.ecsdimazon.messages.UserMessage import UserMessage
+from ecsdiLAB.ecsdimazon.model.BoughtProductResponse import BoughtProductResponse
 from ecsdiLAB.ecsdimazon.model.Product import Product
 
 app = Flask(__name__)
@@ -43,6 +45,16 @@ def search_products(graph):
     return Product.list_to_graph(searched_products).serialize()
 
 
+def user_prodcuts(graph):
+    spm = UserMessage.from_graph(graph)
+    user_prod = context.user_service.get_user_purchases(spm.user)
+    return BoughtProductResponse.list_to_graph(user_prod).serialize()
+
+
+def user(graph):
+    spm = UserMessage.from_graph(graph)
+    context.user_service.register_or_update(spm.user)
+    return None
 
 
 @app.route('/comm', methods=['GET', 'POST'])
@@ -53,7 +65,9 @@ def comm():
 
 
 routings = {
-    Ontologies.SEARCH_PRODUCT_MESSAGE: search_products
+    Ontologies.SEARCH_PRODUCT_MESSAGE: search_products,
+    Ontologies.USER_MESSAGE: user,
+    Ontologies.USER_PRODUCTS_MESSAGE: user_prodcuts
 }
 
 if __name__ == '__main__':

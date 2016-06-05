@@ -5,12 +5,14 @@ from rdflib.namespace import RDF, Namespace, OWL, FOAF
 
 
 class BoughtProduct:
-    def __init__(self, uuid, product,purchaser, priority, payment):
+    def __init__(self, uuid, product,purchaser, priority, payment, delivery_date, sender):
         self.uuid = uuid
         self.product = product
         self.priority = priority
         self.payment = payment
         self.purchaser = purchaser
+        self.delivery_date = delivery_date
+        self.sender = sender
 
     def to_graph(self):
         graph = Graph()
@@ -29,6 +31,8 @@ class BoughtProduct:
         graph.add((p, FOAF.Payment, Literal(self.payment)))
         graph.add((p, FOAF.Priority, Literal(self.priority)))
         graph.add((p, FOAF.Seller, n.__getattr__('#Seller#' + str(self.product.seller.name))))
+        graph.add((p, FOAF.DeliveryDate, None))
+        graph.add((p, FOAF.Sender, None))
         return graph
 
     @classmethod

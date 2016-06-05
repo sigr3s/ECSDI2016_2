@@ -133,10 +133,12 @@ class ProductService:
                 self.purchases.add((bp, FOAF.SendTo, purchaser.direction))
                 self.purchases.add((bp, FOAF.Priority, priority))
                 self.purchases.add((bp, FOAF.Payment, payment))
+                self.purchases.add((bp, FOAF.DeliveryDate, Literal("undefined")))
+                self.purchases.add((bp, FOAF.Sender, Literal("undefined")))
                 self.purchases.serialize(destination='purchases.rdf', format='turtle')
                 soldProducts.append(BoughtProduct(int_uuid,
                                                   Product(ean, name, Brand(brand), price, weight, height, width,
-                                                          SellingCompany(seller)), purchaser, priority, payment))
+                                                          SellingCompany(seller)), purchaser, priority, payment, None, None))
         return soldProducts
 
     def return_prod(self, uuids, user):
