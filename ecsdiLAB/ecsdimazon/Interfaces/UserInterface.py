@@ -9,6 +9,7 @@ from ecsdiLAB.ecsdimazon.messages.PurchaseProductsMessage import PurchaseProduct
 from ecsdiLAB.ecsdimazon.controllers.AgentUtil import build_message
 from ecsdiLAB.ecsdimazon.messages.UserMessage import UserMessage
 from ecsdiLAB.ecsdimazon.model.BoughtProduct import BoughtProduct
+from ecsdiLAB.ecsdimazon.model.BoughtProductResponse import BoughtProductResponse
 from ecsdiLAB.ecsdimazon.model.Product import Product
 from ecsdiLAB.ecsdimazon.model.User import User
 
@@ -49,8 +50,6 @@ def login():
     user_msg = UserMessage(user)
     response = requests.post(users, data=build_message(user_msg.to_graph(), 'QUERY',
                                                        Ontologies.USER_MESSAGE).serialize(format='xml'))
-    print response
-    print response.text
 
 
 def dictionary_to_eans_request(eans):
@@ -67,8 +66,11 @@ def user_purchases():
     user_msg = UserMessage(user)
     response = requests.post(users, data=build_message(user_msg.to_graph(), 'QUERY',
                                                        Ontologies.USER_PRODUCTS_MESSAGE).serialize(format='xml'))
-    print response
-    print response.text
+
+    products_graph = Graph().parse(data=response.text, format='xml')
+    products = BoughtProductResponse.from_graph(products_graph)
+    for product in products:
+        print "Nombre: " + product.name + ", Precio: " + str(product.price) + ", uuid: " + str(product.uuid)
 
 
 def purchase_products():
@@ -80,10 +82,12 @@ def purchase_products():
     response = requests.post(purchase_url, data=build_message(product_purchase.to_graph(), 'BUY',
                                                               Ontologies.PURCHASE_PRODUCT_MESSAGE).serialize(format='xml'))
 
-    ticket = Graph().parse(data=response.text)
-    print response.text
-    print BoughtProduct.from_graph(ticket)
+    products_graph = Graph().parse(data=response.text, format='xml')
+    products = BoughtProduct.from_graph(products_graph)
     if response.status_code == 200:
+        for product in products:
+            print print_product(product.product) + ", uuid: " + str(product.uuid)
+
         global cart
         cart = {}
 
