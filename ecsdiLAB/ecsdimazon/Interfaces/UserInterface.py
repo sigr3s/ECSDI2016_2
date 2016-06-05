@@ -22,7 +22,6 @@ def main():
     username = raw_input("Nombre del usuario que usara el sistema: ")
     direccion = raw_input("Direccion del usuario: ")
     user = User(username, direccion)
-    user_purchases()
     option = -1
     while option != 0:
         print "0. Salir"
