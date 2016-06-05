@@ -39,8 +39,6 @@ class PendingToSendService:
         senders_graph = self.__ask_for_senders__()
         cheapest_sender = self.__negotiate__(senders_graph)
         final_price_message = self.__send_products__(cheapest_sender)
-        r = requests.post(self.purchases_uri, AgentUtil.build_message(self.pending, FIPAACLPerformatives.INFORM,
-                                                                      Ontologies.SENT_PRODUCTS_MESSAGE).serialize())
         self.pending = Graph()
         self.pending.serialize(destination=self.PENDING_FILE_NAME, format='turtle')
         return final_price_message
@@ -115,6 +113,7 @@ class PendingToSendService:
                 date = datetime.datetime.now() + datetime.timedelta(days=self.PRIORITY_TO_DATE.get(o2.toPython()))
                 msg.add((s,FOAF.DeliveryDate,Literal(date)))
             msg.add((s,FOAF.Sender, Literal(name)))
+            msg.add((s,FOAF.Uuid, Literal(o)))
 
         requests.post(self.purchases_uri,data=AgentUtil.build_message(msg,FIPAACLPerformatives.INFORM, Ontologies.SENT_PRODUCTS_MESSAGE).serialize())
         return "The final price of sending all pending products was {}".format(final_price)

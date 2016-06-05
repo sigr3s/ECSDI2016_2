@@ -159,7 +159,8 @@ class ProductService:
             for s2, p2, o2 in graph.triples((s, FOAF.DeliveryDate, None)):
                 self.purchases.remove((s, FOAF.DeliveryDate, None))
                 self.purchases.add((s, FOAF.DeliveryDate, o2))
-            for s3, p3, o3 in self.purchases.remove((s, FOAF.Priority, None)):
+            for s3, p3, o3 in self.purchases.triples((s, FOAF.Priority, None)):
                 self.purchases.remove((s, FOAF.Priority, None))
                 self.purchases.add((s, FOAF.Priority, o3))
+        self.purchases.serialize(destination='purchases.rdf', format='turtle')
         return self.purchases.serialize()
