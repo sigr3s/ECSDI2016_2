@@ -30,8 +30,8 @@ class SendProductsMessage:
             graph.add((p, FOAF.Payment, Literal(bought_product.payment)))
             graph.add((p, FOAF.Priority, Literal(bought_product.priority)))
             graph.add((p, FOAF.Seller, n.__getattr__('#Seller#' + str(bought_product.product.seller.name))))
-            graph.add((p, FOAF.DeliveryDate, None))
-            graph.add((p, FOAF.Sender, None))
+            graph.add((p, FOAF.DeliveryDate, Literal(None)))
+            graph.add((p, FOAF.Sender, Literal(None)))
         return graph
 
     @classmethod
