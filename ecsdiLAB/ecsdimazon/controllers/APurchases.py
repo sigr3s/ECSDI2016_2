@@ -16,7 +16,7 @@ from ecsdiLAB.ecsdimazon.model.BoughtProduct import BoughtProduct
 
 app = Flask(__name__)
 context = ECSDIContext()
-
+agent_ASender = None
 
 @app.route('/')
 def hello_world():
@@ -37,7 +37,7 @@ def purchase_products(graph):
     ppm = PurchaseProductsMessage.from_graph(graph)
     products = context.product_service.purchase(ppm.eans, ppm.user, ppm.priority, ppm.payment)
     product_send = SendProductsMessage(products)
-    send_url = "http://localhost:" + str(Constants.PORT_ASENDER) + "/comm"
+    send_url = agent_ASender + "/comm"
     requests.post(send_url, data=build_message(product_send.to_graph(), FIPAACLPerformatives.REQUEST,
                                                Ontologies.SEND_PRODUCTS_MESSAGE).serialize(
         format='xml'))
@@ -58,4 +58,9 @@ routings = {
 }
 
 if __name__ == '__main__':
+    import sys
+    if len(sys.argv) != 2:
+        print "USAGE: python APurchases {ASENDER_URI}"
+        exit(-1)
+    agent_ASender = sys.argv[1]
     app.run(port=Constants.PORT_APURCHASES, debug=True)
