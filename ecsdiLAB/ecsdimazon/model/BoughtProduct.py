@@ -37,7 +37,7 @@ class BoughtProduct:
         graph.add((p, FOAF.Priority, Literal(self.priority)))
         graph.add((p, FOAF.Seller, n.__getattr__('#Seller#' + str(self.product.seller.name))))
         graph.add((p, FOAF.DeliveryDate, Literal(self.delivery_date)))
-        graph.add((p, FOAF.Sender, Literal(self.delivery_date)))
+        graph.add((p, FOAF.Sender, Literal(self.sender)))
         return graph
 
     @classmethod
@@ -46,7 +46,6 @@ class BoughtProduct:
         for product in products:
             graph = graph + product.to_graph()
         return graph
-
 
     @classmethod
     def from_graph(cls, graph):
@@ -75,7 +74,8 @@ class BoughtProduct:
         for bp, uuid, ean, name, brand, price, weight, height, width, purcahser, sendto, payment, priority, seller, deliveryDate, sender in qres:
             search_res.append(BoughtProduct(
                 uuid.toPython(),
-                Product(ean, name, Brand(brand.toPython()), price, weight, height, width, SellingCompany(seller.toPython())),
+                Product(ean, name, Brand(brand.toPython()), price, weight, height, width,
+                        SellingCompany(seller.toPython())),
                 purcahser.toPython(),
                 priority.toPython(),
                 payment.toPython(),
