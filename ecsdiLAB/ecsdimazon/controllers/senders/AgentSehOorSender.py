@@ -24,5 +24,6 @@ if __name__ == '__main__':
     if len(sys.argv) != 3:
         print "USAGE: python AgentSehOorSender {THIS_AGENT_URI} {DIRECTORY_URI}"
         exit(-1)
-    agent = AgentSender(Sender('Oops', sys.argv[1]), sys.argv[2])
-    app.run(port=Constants.PORT_SEHOOR_SENDER, debug=True)
+    if not agent:
+        agent = AgentSender(Sender('Oops', sys.argv[1]), sys.argv[2])
+    app.run(port=Constants.PORT_SEHOOR_SENDER)
