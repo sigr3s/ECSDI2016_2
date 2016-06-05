@@ -34,36 +34,37 @@ class UserService:
         else:
             self.users.remove((uri, FOAF.Direction, None))
             self.users.add((uri, FOAF.Direction, user.direction))
+        self.users.serialize(destination='users.rdf', format='turtle')
         return user
 
     def get_user_purchases(self, user):
         self.purchases = Graph().parse("purchases.rdf", format="turtle")
         self.products = Graph().parse("catalog.rdf", format="turtle")
-        query = """SELECT ?x ?prod ?purchaser ?uuid
+        query = """SELECT ?x ?prod ?purchaser ?uuid ?date ?sender
             WHERE {{
                 ?x ns1:Product ?prod.
                 ?x ns1:Purchaser ?purchaser.
                 ?x ns1:Uuid ?uuid.
+                ?x ns1:DeliveryDate ?date.
+                ?x ns1:Sender ?sender
                 FILTER  ( regex(?purchaser, "{0}", "i") )
             }}
-            """.format( str(user.username))
+            """.format(str(user.username))
         qres = self.purchases.query(query)
         result = []
-        for x, prod, purchaser, uuid in qres:
+        for x, prod, purchaser, uuid, date, sender in qres:
             str_split = prod.split('#')
             eanP = str_split[- 1]
-            query = """SELECT ?x ?ean ?name ?brand ?price ?seller ?sender ?date
+            query = """SELECT ?x ?ean ?name ?brand ?price ?seller
             WHERE {{
                 ?x ns1:EAN ?ean.
                 ?x ns1:Name ?name.
                 ?x ns1:Brand ?brand.
                 ?x ns1:Price ?price.
                 ?x ns1:Seller ?seller.
-                ?x ns1:Sender ?sender.
-                ?x ns1:DeliveryDate ?date.
                 FILTER  ( {0} )}}""".format(
                 "?ean = " + str(eanP))
             qprod = self.products.query(query)
-            for x, ean, name, brand, price, seller, sender, date in qprod:
+            for y, ean, name, brand, price, seller in qprod:
                 result.append(BoughtProductResponse(uuid, ean, name, brand, price, seller, date, sender))
         return result

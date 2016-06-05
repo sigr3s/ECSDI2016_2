@@ -22,9 +22,9 @@ class BoughtProductResponse:
         graph.add((p, FOAF.Uuid, Literal(self.uuid)))
         graph.add((p, FOAF.EAN, Literal(self.ean)))
         graph.add((p, FOAF.Name, Literal(self.name)))
-        graph.add((p, FOAF.Brand, n.__getattr__('#Brand#' + str(self.brand.name))))
+        graph.add((p, FOAF.Brand, n.__getattr__('#Brand#' + str(self.brand))))
         graph.add((p, FOAF.Price, Literal(self.price)))
-        graph.add((p, FOAF.Seller, n.__getattr__('#Seller#' + str(self.seller.name))))
+        graph.add((p, FOAF.Seller, n.__getattr__('#Seller#' + str(self.seller))))
         graph.add((p, FOAF.Sender, Literal(self.sender)))
         graph.add((p, FOAF.DeliveryDate, Literal(self.delivery_date)))
         return graph
