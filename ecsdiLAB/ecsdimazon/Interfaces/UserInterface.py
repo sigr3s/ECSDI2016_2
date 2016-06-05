@@ -4,8 +4,8 @@ import requests
 from rdflib import Graph
 
 from ecsdiLAB.ecsdimazon.controllers import Constants
-from ecsdiLAB.ecsdimazon.controllers.AgentUtil import build_message
-from ecsdiLAB.ecsdimazon.messages import Ontologies
+from ecsdiLAB.ecsdimazon.controllers.AgentUtil import build_message, performative_of_message
+from ecsdiLAB.ecsdimazon.messages import Ontologies, FIPAACLPerformatives
 from ecsdiLAB.ecsdimazon.messages.PurchaseProductsMessage import PurchaseProductsMessage
 from ecsdiLAB.ecsdimazon.messages.ReturnProductsMessage import ReturnProductsMessage
 from ecsdiLAB.ecsdimazon.messages.SearchProductsMessage import SearchProductsMessage
@@ -99,22 +99,46 @@ def purchase_products():
 
 
 def return_product():
+    users = "http://localhost:" + str(Constants.PORT_AUSER) + "/comm"
+    user_msg = UserMessage(user)
     purchase_url = "http://localhost:" + str(Constants.PORT_APURCHASES) + "/comm"
-    print "Escribe una lista con los uuid de los productos a devolver separados por espacios"
-    ids_prod = raw_input("")
-    strip_ids = ids_prod.strip()
-    if strip_ids != "":
-        split_ids = strip_ids.split(" ")
-        try:
-            uuids = []
-            for id in split_ids:
-                uuids.append(int(id))
-            return_prod = ReturnProductsMessage(uuids, user.username)
-            response = requests.post(purchase_url, data=build_message(return_prod.to_graph(), 'DELETE',
-                                                                      Ontologies.RETURN_PRODUCT_MESSAGE).serialize(
-                                                                      format='xml'))
-        except ValueError:
-            print "Todos los uuid han de ser numericos"
+    response = requests.post(users, data=build_message(user_msg.to_graph(), 'QUERY',
+                                                       Ontologies.USER_PRODUCTS_MESSAGE).serialize(format='xml'))
+    products = []
+    try:
+        products_graph = Graph().parse(data=response.text, format='xml')
+        products = list(enumerate(BoughtProductResponse.from_graph(products_graph)))
+    except:
+        return
+    for i, product in products:
+        print "{} - {}".format(i, product.name)
+    print "Escribe el id (primer numero) del producto a devolver"
+    idx = raw_input("")
+    products = dict(products)
+    if not products.get(int(idx)):
+        print "WRONG! Try again."
+        return_product()
+    print "Selecciona el motivo de tu devolucion:"
+    print Constants.REASON_DICT[1]
+    print Constants.REASON_DICT[2]
+    print Constants.REASON_DICT[3]
+    reason = raw_input("")
+    if reason not in ['1', '2', '3']:
+        print "WRONG! Try again."
+        return_product()
+    try:
+        return_prod = ReturnProductsMessage(products.get(int(idx)).uuid, user.username, Constants.REASON_DICT[int(reason)])
+        response = requests.post(purchase_url, data=build_message(return_prod.to_graph(), FIPAACLPerformatives.REQUEST,
+                                                                  Ontologies.RETURN_PRODUCT_MESSAGE).serialize(
+                                                                  format='xml'))
+        graph = Graph().parse(data=response.text)
+        if performative_of_message(graph) == FIPAACLPerformatives.AGREE:
+            print "Un repartidor de Oops vendra manana a recoger el producto."
+            return
+        else:
+            print "Han pasado ya 15 dias para tu motivo, no puedes devolver el producto."
+    except:
+        print "Error al devolver."
     print
 
 

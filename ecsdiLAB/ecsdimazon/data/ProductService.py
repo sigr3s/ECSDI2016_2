@@ -3,7 +3,9 @@ import uuid
 from rdflib import Graph, Literal
 from rdflib.namespace import RDF, Namespace, OWL, FOAF
 
+from ecsdiLAB.ecsdimazon.controllers.AgentUtil import *
 from ecsdiLAB.ecsdimazon.controllers import Constants
+from ecsdiLAB.ecsdimazon.messages import FIPAACLPerformatives, Ontologies
 from ecsdiLAB.ecsdimazon.model.BoughtProduct import BoughtProduct
 from ecsdiLAB.ecsdimazon.model.Brand import Brand
 from ecsdiLAB.ecsdimazon.model.Product import Product
@@ -22,6 +24,9 @@ class ProductService:
         if not os.path.exists('purchases.rdf'):
             open('purchases.rdf', 'w')
         self.purchases = Graph().parse("purchases.rdf", format="turtle")
+        if not os.path.exists('returns.rdf'):
+            open('returns.rdf', 'w')
+        self.returns = Graph().parse("returns.rdf", format="turtle")
 
     def initialize(cls):
         PrE = Namespace("http://www.products.org/ontology/")
@@ -141,12 +146,11 @@ class ProductService:
                                                   "undefined", "undefined"))
         return soldProducts
 
-    def return_prod(self, uuids, user):
+    def return_prod(self, uuid, user, reason):
         n = Namespace(Constants.NAMESPACE)
-        for uuid in uuids:
-            uri = n.__getattr__('#BoughtProduct#' + str(uuid))
-            if not (uri, FOAF.Purchaser, user) in self.purchases:
-                return
+        uri = n.__getattr__('#BoughtProduct#' + str(uuid))
+        if not (uri, FOAF.Purchaser, user) in self.purchases:
+            return
         returnedProducts = []
         for uuidP in uuids:
             bp = n.__getattr__('#BoughtProduct#' + str(uuidP))

@@ -7,17 +7,18 @@ from ecsdiLAB.ecsdimazon.model.User import User
 
 
 class ReturnProductsMessage:
-    def __init__(self, uuids, username):
-        self.uuids = uuids
+    def __init__(self, uuid, username, reason):
+        self.uuid = uuid
         self.username = username
+        self.reason = reason
 
     def to_graph(self):
         graph = Graph()
         n = Namespace(Constants.NAMESPACE)
-        for uuid in self.uuids:
-            p = n.__getattr__('#Product#' + str(uuid))
-            graph.add((p, FOAF.Uuid, Literal(uuid)))
-            graph.add((p, FOAF.Purchaser, Literal(self.username)))
+        p = n.__getattr__('#BoughtProduct#' + str(self.uuid))
+        graph.add((p, FOAF.Uuid, Literal(self.uuid)))
+        graph.add((p, FOAF.Purchaser, Literal(self.username)))
+        graph.add((p, FOAF.Reason, Literal(self.reason)))
         return graph
 
     @classmethod
@@ -29,17 +30,13 @@ class ReturnProductsMessage:
 
     @classmethod
     def from_graph(cls, graph):
-        query = """SELECT ?x ?uuid ?purchaser
+        query = """SELECT ?x ?uuid ?purchaser ?reason
             WHERE {
                 ?x ns1:Uuid ?uuid.
                 ?x ns1:Purchaser ?purchaser.
+                ?x ns1:Reason ?reason
             }
         """
         qres = graph.query(query)
-        search_res = []
-        purchaser = None
-        for p, uuid, purchaser in qres:
-            search_res.append(uuid)
-            purchaser = purchaser
-        pm = ReturnProductsMessage(search_res,purchaser )
-        return pm
+        for p, uuid, purchaser, reason in qres:
+            return ReturnProductsMessage(uuid, purchaser, reason)

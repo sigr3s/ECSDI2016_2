@@ -29,8 +29,7 @@ def hello_world():
 
 def return_products(graph):
     rpm = ReturnProductsMessage.from_graph(graph)
-    context.product_service.return_prod(rpm.uuids, rpm.username)
-    return rpm.to_graph().serialize()
+    return context.product_service.return_prod(rpm.uuid, rpm.username, rpm.reason)
 
 
 def purchase_products(graph):

@@ -17,3 +17,12 @@ PAYMENT_VISA = 'visa'
 PRIORITY_LOW = 'low'
 PRIORITY_MEDIUM = 'medium'
 PRIORITY_HIGH = 'high'
+
+REASON_DEFECTIVE = "1. Producto defectuoso."
+REASON_WRONG_PRODUCT = "2. Producto equivocado."
+REASON_NON_SATISFACTORY = "3. No me satisface (solo aplica los primeros 15 dias)"
+REASON_DICT = {
+    1: REASON_DEFECTIVE,
+    2: REASON_WRONG_PRODUCT,
+    3: REASON_NON_SATISFACTORY
+}
