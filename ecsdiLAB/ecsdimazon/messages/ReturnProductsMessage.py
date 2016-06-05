@@ -37,7 +37,7 @@ class ReturnProductsMessage:
         """
         qres = graph.query(query)
         search_res = []
-        purchaser = None;
+        purchaser = None
         for p, uuid, purchaser in qres:
             search_res.append(uuid)
             purchaser = purchaser

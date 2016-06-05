@@ -10,6 +10,6 @@
 <http://www.owl-ontologies.com/Ontology1463560793.owl#User#Oriol> ns1:Direction "WD" ;
     ns1:Username "Oriol" .
 
-<http://www.owl-ontologies.com/Ontology1463560793.owl#User#sigr3s> ns1:Direction "google" ;
+<http://www.owl-ontologies.com/Ontology1463560793.owl#User#sigr3s> ns1:Direction "lop" ;
     ns1:Username "sigr3s" .
 
