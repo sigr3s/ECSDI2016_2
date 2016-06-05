@@ -47,10 +47,10 @@ class PendingToSendService:
         all_senders_with_price = []
         for s, name, negotiation_uri in qres:
             print 'Getting price for {}'.format(name.toPython())
-            negotiation_uri = negotiation_uri.toPython()
+            negotiation_uri = negotiation_uri.toPython() + "/comm"
             r = requests.post(negotiation_uri, data=AgentUtil.build_message(Graph(),
                                                                             FIPAACLPerformatives.REQUEST,
-                                                                            Ontologies.SENDERS_PRICE_REQUEST))
+                                                                            Ontologies.SENDERS_PRICE_REQUEST).serialize())
             ppk = AgentUtil.field_of_message(Graph().parse(data=r.text), FOAF.PricePerKilo).toPython()
             print 'Price of {} is {}'.format(name.toPython(), ppk)
             all_senders_with_price.append((s, name, negotiation_uri, ppk))
@@ -63,11 +63,10 @@ class PendingToSendService:
         counter_offer_price = min_price - random.uniform(0.1, 1)
         for s, name, negotiation_uri, ppk in all_senders_with_price:
             counter_offer_graph = Graph()
-            n = Namespace(Constants.NAMESPACE)
             counter_offer_graph.add((s, FOAF.PricePerKilo, Literal(counter_offer_price)))
             r = requests.post(negotiation_uri, data=AgentUtil.build_message(counter_offer_graph,
                                                                             FIPAACLPerformatives.REQUEST,
-                                                                            Ontologies.SENDERS_NEGOTIATION_REQUEST))
+                                                                            Ontologies.SENDERS_NEGOTIATION_REQUEST).serialize())
             ng = Graph().parse(data=r.text)
             if AgentUtil.performative_of_message(ng) == FIPAACLPerformatives.AGREE:
                 all_senders_with_price_negotiated.append((s, name, negotiation_uri, counter_offer_price))

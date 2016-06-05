@@ -46,4 +46,4 @@ def performative_of_message(gmess):
 
 def field_of_message(gmess, predicate):
     for s, p, o in gmess.triples((None, predicate, None)):
-        return str(o)
+        return o
