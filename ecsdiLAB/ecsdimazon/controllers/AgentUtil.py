@@ -14,10 +14,10 @@ def build_message(gmess, perf, ontology, sender=None, receiver=None, content=Non
 
     :param gmess: grafo RDF sobre el que se deja el mensaje
     :param perf: performativa del mensaje
+    :param ontology: ontologia de mensaje
     :param sender: URI del sender
     :param receiver: URI del receiver
     :param content: URI que liga el contenido del mensaje
-    :param msgcnt: numero de mensaje
     :return:
     """
 
