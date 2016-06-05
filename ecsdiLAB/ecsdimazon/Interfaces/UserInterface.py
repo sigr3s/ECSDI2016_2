@@ -13,7 +13,15 @@ from ecsdiLAB.ecsdimazon.model.Product import Product
 from ecsdiLAB.ecsdimazon.model.User import User
 
 
+def login():
+    pass
+
+
 def main():
+    global user
+    username = raw_input("Nombre del usuario que usara el sistema: ")
+    direccion = raw_input("Direccion del usuario: ")
+    user = User(username, direccion)
     user_purchases()
     option = -1
     while option != 0:
@@ -45,23 +53,22 @@ def dictionary_to_eans_request(eans):
             eans.append(str(ean_of_product))
             i += 1
 
+
 def user_purchases():
     users = "http://localhost:" + str(Constants.PORT_AUSER) + "/comm"
-    user_msg = UserMessage( User("sigr3s", "foc follet"))
+    user_msg = UserMessage(user)
     response = requests.post(users, data=build_message(user_msg.to_graph(), 'QUERY',
-
-                                                              Ontologies.USER_PRODUCTS_MESSAGE).serialize(
-        format='xml'))
+                                                       Ontologies.USER_PRODUCTS_MESSAGE).serialize(format='xml'))
     print response
+    print response.text
+
 
 def purchase_products():
     eans = []
     purchase_url = "http://localhost:" + str(Constants.PORT_APURCHASES) + "/comm"
-    username = raw_input("Nombre de usuario: ")
-    direction = raw_input("Direccion de envio: ")
     dictionary_to_eans_request(eans)
 
-    product_purchase = PurchaseProductsMessage(eans, User(username,direction), Constants.PRIORITY_HIGH, Constants.PAYMENT_PAYPAL)
+    product_purchase = PurchaseProductsMessage(eans, user, Constants.PRIORITY_HIGH, Constants.PAYMENT_PAYPAL)
     response = requests.post(purchase_url, data=build_message(product_purchase.to_graph(), 'BUY',
                                                               Ontologies.PURCHASE_PRODUCT_MESSAGE).serialize(format='xml'))
 
@@ -75,7 +82,6 @@ def purchase_products():
 
 def return_product():
     purchase_url = "http://localhost:" + str(Constants.PORT_APURCHASES) + "/comm"
-    username = raw_input("Nombre de usuario que quiere devolver productos: ")
     print "Escribe una lista con los uuid de los productos a devolver separados por espacios"
     ids_prod = raw_input("")
     if ids_prod.strip() == "":
@@ -84,13 +90,14 @@ def return_product():
             uuids = []
             for id in split_ids:
                 uuids.append(int(id))
-            return_prod = ReturnProductsMessage(uuids, username)
+            return_prod = ReturnProductsMessage(uuids, user.username)
             response = requests.post(purchase_url, data=build_message(return_prod.to_graph(), 'DELETE',
                                                                       Ontologies.RETURN_PRODUCT_MESSAGE).serialize(
                                                                       format='xml'))
             print response
         except ValueError:
             print "Todos los uuid han de ser numericos"
+
 
 def search_product():
     url = "http://localhost:" + str(Constants.PORT_AUSER) + "/comm"
