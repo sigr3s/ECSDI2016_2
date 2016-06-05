@@ -153,3 +153,6 @@ class ProductService:
             self.purchases.remove((bp, None, None))
             self.purchases.serialize(destination='purchases.rdf', format='turtle')
         return None
+
+    def sent_products(self, graph):
+        pass

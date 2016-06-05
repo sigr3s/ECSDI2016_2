@@ -11,8 +11,9 @@ from ecsdiLAB.ecsdimazon.messages import FIPAACLPerformatives, Ontologies
 class PendingToSendService:
     PENDING_FILE_NAME = 'pending.rdf'
 
-    def __init__(self, directory_uri):
-        self.directory_uri = directory_uri+"/comm"
+    def __init__(self, directory_uri, purchases_uri):
+        self.directory_uri = directory_uri + "/comm"
+        self.purchases_uri = purchases_uri + "/comm"
         import os
         if not os.path.exists(self.PENDING_FILE_NAME):
             open(self.PENDING_FILE_NAME, 'w')
@@ -28,6 +29,8 @@ class PendingToSendService:
         senders_graph = self.__ask_for_senders__()
         cheapest_sender = self.__negotiate__(senders_graph)
         final_price_message = self.__send_products__(cheapest_sender)
+        r = requests.post(self.purchases_uri, AgentUtil.build_message(self.pending, FIPAACLPerformatives.INFORM,
+                                                                      Ontologies.SENT_PRODUCTS_MESSAGE))
         self.pending = Graph()
         self.pending.serialize(destination=self.PENDING_FILE_NAME, format='turtle')
         return final_price_message
@@ -81,7 +84,6 @@ class PendingToSendService:
         else:
             return random.choice(selected_senders)
 
-
     def __send_products__(self, sender):
         s, name, negotiation_uri, ppk = sender
         ontology = Ontologies.SENDERS_SEND_PRODUCT_REQUEST
@@ -98,5 +100,4 @@ class PendingToSendService:
         ).serialize())
         final_price = AgentUtil.field_of_message(Graph().parse(data=r.text), FOAF.TotalPrice).toPython()
         # we assume the sender comes and gets whatever wherever
-        self.pending = Graph()  # no longer pending
         return "The final price of sending all pending products was {}".format(final_price)
