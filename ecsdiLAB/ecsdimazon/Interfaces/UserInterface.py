@@ -7,29 +7,32 @@ from ecsdiLAB.ecsdimazon.messages.ReturnProductsMessage import ReturnProductsMes
 from ecsdiLAB.ecsdimazon.messages.SearchProductsMessage import SearchProductsMessage
 from ecsdiLAB.ecsdimazon.messages.PurchaseProductsMessage import PurchaseProductsMessage
 from ecsdiLAB.ecsdimazon.controllers.AgentUtil import build_message
+from ecsdiLAB.ecsdimazon.model.BoughtProduct import BoughtProduct
 from ecsdiLAB.ecsdimazon.model.Product import Product
 from ecsdiLAB.ecsdimazon.model.User import User
 
 
 def main():
-    return_product()
     option = -1
     while option != 0:
         print "0. Salir"
         print "1. Buscar productos"
         print "2. Ir a la cesta de la compra"
+        print "3. Devolver un producto"
         option = raw_input("Escoge una opcion: ")
         try:
             option = int(option)
         except ValueError:
             pass
-        if option not in [0, 1, 2]:
+        if option not in [0, 1, 2, 3]:
             print "Opcion incorrecta"
         else:
             if option == 1:
                 search_product()
             if option == 2:
                 show_cart()
+            if option == 3:
+                return_product()
 
 
 def dictionary_to_eans_request(eans):
@@ -41,18 +44,21 @@ def dictionary_to_eans_request(eans):
             i += 1
 
 
-def bought_products():
+def purchase_products():
     eans = []
     purchase_url = "http://localhost:" + str(Constants.PORT_APURCHASES) + "/comm"
-    username = raw_input("Nombre de usuario")
+    username = raw_input("Nombre de usuario: ")
     direction = raw_input("Direccion de envio: ")
     dictionary_to_eans_request(eans)
 
     product_purchase = PurchaseProductsMessage(eans, User(username,direction), Constants.PRIORITY_HIGH, Constants.PAYMENT_PAYPAL)
     response = requests.post(purchase_url, data=build_message(product_purchase.to_graph(), 'BUY',
-
                                                               Ontologies.PURCHASE_PRODUCT_MESSAGE).serialize(
-        format='xml'))
+                                                              format='xml'))
+
+    print response.text
+    ticket = Graph().parse(data=response.text, format='xml')
+    print BoughtProduct.from_graph(ticket)
     if response.status_code == 200:
         global cart
         cart = {}
@@ -60,12 +66,22 @@ def bought_products():
 
 def return_product():
     purchase_url = "http://localhost:" + str(Constants.PORT_APURCHASES) + "/comm"
-    uuids = [6191342809533014444927619513709573502]
-    return_prod = ReturnProductsMessage(uuids, "Juan")
-    response = requests.post(purchase_url, data=build_message(return_prod.to_graph(), 'DELETE',
-                                                              Ontologies.RETURN_PRODUCT_MESSAGE).serialize(
-        format='xml'))
-
+    username = raw_input("Nombre de usuario que quiere devolver productos: ")
+    print "Escribe una lista con los uuid de los productos a devolver separados por espacios"
+    ids_prod = raw_input("")
+    if ids_prod.strip() == "":
+        split_ids = ids_prod.strip().split(" ")
+        try:
+            uuids = []
+            for id in split_ids:
+                uuids.append(int(id))
+            return_prod = ReturnProductsMessage(uuids, username)
+            response = requests.post(purchase_url, data=build_message(return_prod.to_graph(), 'DELETE',
+                                                                      Ontologies.RETURN_PRODUCT_MESSAGE).serialize(
+                                                                      format='xml'))
+            print response
+        except ValueError:
+            print "Todos los uuid han de ser numericos"
 
 def search_product():
     url = "http://localhost:" + str(Constants.PORT_AUSER) + "/comm"
@@ -107,8 +123,9 @@ def search_product():
             try:
                 add_to_cart(lopSplit, products)
             except ValueError:
-                print "todos los valores han de ser numericos"
-    except:
+                print "Todos los valores han de ser numericos"
+    except Exception as ex:
+        print ex
         print "No hay productos que coincidan con los parametros pasados"
     print
 
@@ -129,7 +146,7 @@ def show_cart():
             print print_product(key) + ". " + str(value) + " unidades"
         option = raw_input("Comprar? y/n: ")
         if (option == 'y'):
-            bought_products()
+            purchase_products()
     else:
         print "No tienes productos en tu cesta"
     print

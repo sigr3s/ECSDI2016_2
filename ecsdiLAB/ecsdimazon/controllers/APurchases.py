@@ -41,7 +41,7 @@ def purchase_products(graph):
     requests.post(send_url, data=build_message(product_send.to_graph(), '',
                                                Ontologies.SEND_PRODUCTS_MESSAGE).serialize(
         format='xml'))
-    return BoughtProduct.list_to_graph(products).serialize()
+    return BoughtProduct.list_to_graph(products).serialize(format='xml')
 
 
 @app.route('/comm', methods=['POST'])
