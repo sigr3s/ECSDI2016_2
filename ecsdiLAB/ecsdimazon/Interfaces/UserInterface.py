@@ -13,28 +13,25 @@ from ecsdiLAB.ecsdimazon.model.Product import Product
 from ecsdiLAB.ecsdimazon.model.User import User
 
 
-def login():
-    pass
-
-
 def main():
     global user
     username = raw_input("Nombre del usuario que usara el sistema: ")
     direccion = raw_input("Direccion del usuario: ")
     user = User(username, direccion)
-    user_purchases()
+    login()
     option = -1
     while option != 0:
         print "0. Salir"
         print "1. Buscar productos"
         print "2. Ir a la cesta de la compra"
         print "3. Devolver un producto"
+        print "4. Consultar compras"
         option = raw_input("Escoge una opcion: ")
         try:
             option = int(option)
         except ValueError:
             pass
-        if option not in [0, 1, 2, 3]:
+        if option not in [0, 1, 2, 3, 4]:
             print "Opcion incorrecta"
         else:
             if option == 1:
@@ -43,6 +40,17 @@ def main():
                 show_cart()
             if option == 3:
                 return_product()
+            if option == 4:
+                user_purchases()
+
+
+def login():
+    users = "http://localhost:" + str(Constants.PORT_AUSER) + "/comm"
+    user_msg = UserMessage(user)
+    response = requests.post(users, data=build_message(user_msg.to_graph(), 'QUERY',
+                                                       Ontologies.USER_MESSAGE).serialize(format='xml'))
+    print response
+    print response.text
 
 
 def dictionary_to_eans_request(eans):
