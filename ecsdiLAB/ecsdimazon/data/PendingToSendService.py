@@ -1,6 +1,7 @@
 import random
 
 import requests
+import datetime
 from rdflib import Graph, Namespace, Literal
 from rdflib.namespace import FOAF
 
@@ -10,6 +11,12 @@ from ecsdiLAB.ecsdimazon.messages import FIPAACLPerformatives, Ontologies
 
 class PendingToSendService:
     PENDING_FILE_NAME = 'pending.rdf'
+
+    PRIORITY_TO_DATE ={
+        Constants.PRIORITY_LOW : 10 ,
+        Constants.PRIORITY_MEDIUM : 5,
+        Constants.PRIORITY_HIGH : 1
+    }
 
     def __init__(self, directory_uri, purchases_uri):
         self.directory_uri = directory_uri + "/comm"
@@ -99,5 +106,12 @@ class PendingToSendService:
             ontology
         ).serialize())
         final_price = AgentUtil.field_of_message(Graph().parse(data=r.text), FOAF.TotalPrice).toPython()
-        # we assume the sender comes and gets whatever wherever
+        msg = Graph()
+        for s, p ,o in self.pending.triples((None,FOAF.Uuid,None)):
+            for s2, p2, o2 in self.pending.triples((s, FOAF.Priority, None)):
+                date = datetime.datetime.now() + datetime.timedelta(days=self.PRIORITY_TO_DATE.get(o2.toPython()))
+                msg.add((s,FOAF.DeliveryDate,Literal(date)))
+            msg.add((s,FOAF.Sender, Literal(name)))
+
+        requests.post(self.purchases_uri,data=AgentUtil.build_message(msg,FIPAACLPerformatives.INFORM, Ontologies.SENT_PRODUCTS_MESSAGE).serialize())
         return "The final price of sending all pending products was {}".format(final_price)

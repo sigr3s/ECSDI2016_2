@@ -1,7 +1,6 @@
-import json
 import uuid
 
-from rdflib import Graph, Literal, URIRef
+from rdflib import Graph, Literal
 from rdflib.namespace import RDF, Namespace, OWL, FOAF
 
 from ecsdiLAB.ecsdimazon.controllers import Constants
@@ -96,7 +95,7 @@ class ProductService:
         self.products_in_catalog.add((p, FOAF.Width, Literal(product.width)))
         self.products_in_catalog.add((p, FOAF.Seller, n.__getattr__('#Seller#' + str(product.seller))))
         self.products_in_catalog.serialize(destination='catalog.rdf', format='turtle')
-        upload_result.append(Product(product.ean, product.name , Brand(product.brand), product.price,
+        upload_result.append(Product(product.ean, product.name, Brand(product.brand), product.price,
                                      product.weight, product.height, product.width, SellingCompany(product.seller)))
         return upload_result
 
@@ -138,7 +137,8 @@ class ProductService:
                 self.purchases.serialize(destination='purchases.rdf', format='turtle')
                 soldProducts.append(BoughtProduct(int_uuid,
                                                   Product(ean, name, Brand(brand), price, weight, height, width,
-                                                          SellingCompany(seller)), purchaser, priority, payment, "undefined", "undefined"))
+                                                          SellingCompany(seller)), purchaser, priority, payment,
+                                                  "undefined", "undefined"))
         return soldProducts
 
     def return_prod(self, uuids, user):
@@ -155,4 +155,11 @@ class ProductService:
         return None
 
     def sent_products(self, graph):
-        pass
+        for s, p, o in graph.triples((None, FOAF.Uuid, None)):
+            for s2, p2, o2 in graph.triples((s, FOAF.DeliveryDate, None)):
+                self.purchases.remove((s, FOAF.DeliveryDate, None))
+                self.purchases.add((s, FOAF.DeliveryDate, o2))
+            for s3, p3, o3 in self.purchases.remove((s, FOAF.Priority, None)):
+                self.purchases.remove((s, FOAF.Priority, None))
+                self.purchases.add((s, FOAF.Priority, o3))
+        return self.purchases.serialize()
