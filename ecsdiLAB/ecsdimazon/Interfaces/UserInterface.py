@@ -1,12 +1,14 @@
-import requests
 import sys
+
+import requests
 from rdflib import Graph
-from ecsdiLAB.ecsdimazon.messages import Ontologies
+
 from ecsdiLAB.ecsdimazon.controllers import Constants
+from ecsdiLAB.ecsdimazon.controllers.AgentUtil import build_message
+from ecsdiLAB.ecsdimazon.messages import Ontologies
+from ecsdiLAB.ecsdimazon.messages.PurchaseProductsMessage import PurchaseProductsMessage
 from ecsdiLAB.ecsdimazon.messages.ReturnProductsMessage import ReturnProductsMessage
 from ecsdiLAB.ecsdimazon.messages.SearchProductsMessage import SearchProductsMessage
-from ecsdiLAB.ecsdimazon.messages.PurchaseProductsMessage import PurchaseProductsMessage
-from ecsdiLAB.ecsdimazon.controllers.AgentUtil import build_message
 from ecsdiLAB.ecsdimazon.messages.UserMessage import UserMessage
 from ecsdiLAB.ecsdimazon.model.BoughtProduct import BoughtProduct
 from ecsdiLAB.ecsdimazon.model.BoughtProductResponse import BoughtProductResponse
@@ -28,6 +30,7 @@ def main():
         print "3. Devolver un producto"
         print "4. Consultar compras"
         option = raw_input("Escoge una opcion: ")
+        print
         try:
             option = int(option)
         except ValueError:
@@ -66,28 +69,29 @@ def user_purchases():
     user_msg = UserMessage(user)
     response = requests.post(users, data=build_message(user_msg.to_graph(), 'QUERY',
                                                        Ontologies.USER_PRODUCTS_MESSAGE).serialize(format='xml'))
-
-    products_graph = Graph().parse(data=response.text, format='xml')
-    products = BoughtProductResponse.from_graph(products_graph)
-    for product in products:
-        print "Nombre: " + product.name + ", Precio: " + str(product.price) + ", uuid: " + str(product.uuid) + ", Repartidor: " + str(product.sender) + ", Fecha de entrega: " +str(product.delivery_date)
+    try:
+        products_graph = Graph().parse(data=response.text, format='xml')
+        products = BoughtProductResponse.from_graph(products_graph)
+        for product in products:
+            print "Nombre: " + product.name + ", Precio: " + str(product.price) + ", uuid: " + str(product.uuid)
+    except:
+        print "No has comprado ningun producto aun."
+    print
 
 
 def purchase_products():
     eans = []
     purchase_url = "http://localhost:" + str(Constants.PORT_APURCHASES) + "/comm"
     dictionary_to_eans_request(eans)
-
     product_purchase = PurchaseProductsMessage(eans, user, Constants.PRIORITY_HIGH, Constants.PAYMENT_PAYPAL)
     response = requests.post(purchase_url, data=build_message(product_purchase.to_graph(), 'BUY',
-                                                              Ontologies.PURCHASE_PRODUCT_MESSAGE).serialize(format='xml'))
+                                                          Ontologies.PURCHASE_PRODUCT_MESSAGE).serialize(format='xml'))
 
-    products_graph = Graph().parse(data=response.text, format='xml')
-    products = BoughtProduct.from_graph(products_graph)
     if response.status_code == 200:
+        products_graph = Graph().parse(data=response.text, format='xml')
+        products = BoughtProduct.from_graph(products_graph)
         for product in products:
             print print_product(product.product) + ", uuid: " + str(product.uuid)
-
         global cart
         cart = {}
 
@@ -96,8 +100,9 @@ def return_product():
     purchase_url = "http://localhost:" + str(Constants.PORT_APURCHASES) + "/comm"
     print "Escribe una lista con los uuid de los productos a devolver separados por espacios"
     ids_prod = raw_input("")
-    if ids_prod.strip() == "":
-        split_ids = ids_prod.strip().split(" ")
+    strip_ids = ids_prod.strip()
+    if strip_ids != "":
+        split_ids = strip_ids.split(" ")
         try:
             uuids = []
             for id in split_ids:
@@ -106,9 +111,9 @@ def return_product():
             response = requests.post(purchase_url, data=build_message(return_prod.to_graph(), 'DELETE',
                                                                       Ontologies.RETURN_PRODUCT_MESSAGE).serialize(
                                                                       format='xml'))
-            print response
         except ValueError:
             print "Todos los uuid han de ser numericos"
+    print
 
 
 def search_product():
@@ -135,6 +140,7 @@ def search_product():
     response = requests.get(url, data=build_message(product_search.to_graph(), 'QUERY', Ontologies.SEARCH_PRODUCT_MESSAGE)
                             .serialize(format='xml'))
 
+    print ""
     try:
         products_graph = Graph().parse(data=response.text, format='xml')
         products = Product.from_graph(products_graph)
