@@ -46,7 +46,7 @@ class AgentSender:
         price = self.__total_price__(graph)
         graph = Graph()
         n = Namespace(Constants.NAMESPACE)
-        graph.add((n.__getattr__('#ProductSending#' + uuid.uuid4()), FOAF.TotalPrice, Literal(price)))
+        graph.add((n.__getattr__('#ProductSending#' + str(uuid.uuid4())), FOAF.TotalPrice, Literal(price)))
         return build_message(graph, performative, ontology)
 
     def negotiate(self, graph):

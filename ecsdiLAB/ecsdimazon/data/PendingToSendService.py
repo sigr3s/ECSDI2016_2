@@ -11,8 +11,9 @@ from ecsdiLAB.ecsdimazon.messages import FIPAACLPerformatives, Ontologies
 class PendingToSendService:
     PENDING_FILE_NAME = 'pending.rdf'
 
-    def __init__(self, directory_uri):
-        self.directory_uri = directory_uri+"/comm"
+    def __init__(self, directory_uri, purchases_uri):
+        self.directory_uri = directory_uri + "/comm"
+        self.purchases_uri = purchases_uri + "/comm"
         import os
         if not os.path.exists(self.PENDING_FILE_NAME):
             open(self.PENDING_FILE_NAME, 'w')
@@ -27,9 +28,12 @@ class PendingToSendService:
     def time_to_send(self):
         senders_graph = self.__ask_for_senders__()
         cheapest_sender = self.__negotiate__(senders_graph)
-        self.__send_products__(cheapest_sender)
+        final_price_message = self.__send_products__(cheapest_sender)
+        r = requests.post(self.purchases_uri, AgentUtil.build_message(self.pending, FIPAACLPerformatives.INFORM,
+                                                                      Ontologies.SENT_PRODUCTS_MESSAGE))
         self.pending = Graph()
         self.pending.serialize(destination=self.PENDING_FILE_NAME, format='turtle')
+        return final_price_message
 
     def __ask_for_senders__(self):
         data = AgentUtil.build_message(Graph(), FIPAACLPerformatives.REQUEST, Ontologies.SENDERS_LIST_REQUEST)
@@ -47,10 +51,10 @@ class PendingToSendService:
         all_senders_with_price = []
         for s, name, negotiation_uri in qres:
             print 'Getting price for {}'.format(name.toPython())
-            negotiation_uri = negotiation_uri.toPython()
+            negotiation_uri = negotiation_uri.toPython() + "/comm"
             r = requests.post(negotiation_uri, data=AgentUtil.build_message(Graph(),
                                                                             FIPAACLPerformatives.REQUEST,
-                                                                            Ontologies.SENDERS_PRICE_REQUEST))
+                                                                            Ontologies.SENDERS_PRICE_REQUEST).serialize())
             ppk = AgentUtil.field_of_message(Graph().parse(data=r.text), FOAF.PricePerKilo).toPython()
             print 'Price of {} is {}'.format(name.toPython(), ppk)
             all_senders_with_price.append((s, name, negotiation_uri, ppk))
@@ -63,24 +67,22 @@ class PendingToSendService:
         counter_offer_price = min_price - random.uniform(0.1, 1)
         for s, name, negotiation_uri, ppk in all_senders_with_price:
             counter_offer_graph = Graph()
-            n = Namespace(Constants.NAMESPACE)
             counter_offer_graph.add((s, FOAF.PricePerKilo, Literal(counter_offer_price)))
             r = requests.post(negotiation_uri, data=AgentUtil.build_message(counter_offer_graph,
                                                                             FIPAACLPerformatives.REQUEST,
-                                                                            Ontologies.SENDERS_NEGOTIATION_REQUEST))
+                                                                            Ontologies.SENDERS_NEGOTIATION_REQUEST).serialize())
             ng = Graph().parse(data=r.text)
             if AgentUtil.performative_of_message(ng) == FIPAACLPerformatives.AGREE:
                 all_senders_with_price_negotiated.append((s, name, negotiation_uri, counter_offer_price))
             else:
                 all_senders_with_price_negotiated.append((s, name, negotiation_uri, ppk))
 
-        min_price_negotiated = min(map(lambda x: x[3], all_senders_with_price))
+        min_price_negotiated = min(map(lambda x: x[3], all_senders_with_price_negotiated))
         selected_senders = filter(lambda x: x[3] == min_price_negotiated, all_senders_with_price_negotiated)
-        if len(all_senders_with_price) == 1:
+        if len(selected_senders) == 1:
             return selected_senders[0]
         else:
             return random.choice(selected_senders)
-
 
     def __send_products__(self, sender):
         s, name, negotiation_uri, ppk = sender
@@ -98,5 +100,4 @@ class PendingToSendService:
         ).serialize())
         final_price = AgentUtil.field_of_message(Graph().parse(data=r.text), FOAF.TotalPrice).toPython()
         # we assume the sender comes and gets whatever wherever
-        self.pending = Graph()  # no longer pending
         return "The final price of sending all pending products was {}".format(final_price)

@@ -28,8 +28,8 @@ def time_to_send():
 if __name__ == '__main__':
     import sys
 
-    if len(sys.argv) != 2:
-        print "USAGE: python ASender {DIRECTORY_URI (with port)}"
+    if len(sys.argv) != 3:
+        print "USAGE: python ASender {DIRECTORY_URI (with port)} {APURCHASES_URI (with port)}"
         exit(-1)
-    service = PendingToSendService(sys.argv[1])
+    service = PendingToSendService(sys.argv[1], sys.argv[2])
     app.run(port=Constants.PORT_ASENDER, debug=True)

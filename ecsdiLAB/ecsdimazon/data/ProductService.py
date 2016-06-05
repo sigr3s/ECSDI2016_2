@@ -138,7 +138,7 @@ class ProductService:
                 self.purchases.serialize(destination='purchases.rdf', format='turtle')
                 soldProducts.append(BoughtProduct(int_uuid,
                                                   Product(ean, name, Brand(brand), price, weight, height, width,
-                                                          SellingCompany(seller)), purchaser, priority, payment, None, None))
+                                                          SellingCompany(seller)), purchaser, priority, payment, "undefined", "undefined"))
         return soldProducts
 
     def return_prod(self, uuids, user):
@@ -153,3 +153,6 @@ class ProductService:
             self.purchases.remove((bp, None, None))
             self.purchases.serialize(destination='purchases.rdf', format='turtle')
         return None
+
+    def sent_products(self, graph):
+        pass

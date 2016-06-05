@@ -53,7 +53,8 @@ def comm():
 
 routings = {
     Ontologies.PURCHASE_PRODUCT_MESSAGE: purchase_products,
-    Ontologies.RETURN_PRODUCT_MESSAGE: return_products
+    Ontologies.RETURN_PRODUCT_MESSAGE: return_products,
+    Ontologies.SENT_PRODUCTS_MESSAGE: context.product_service.sent_products
 }
 
 if __name__ == '__main__':
