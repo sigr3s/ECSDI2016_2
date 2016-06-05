@@ -37,7 +37,7 @@ class PendingToSendService:
         cheapest_sender = self.__negotiate__(senders_graph)
         final_price_message = self.__send_products__(cheapest_sender)
         r = requests.post(self.purchases_uri, AgentUtil.build_message(self.pending, FIPAACLPerformatives.INFORM,
-                                                                      Ontologies.SENT_PRODUCTS_MESSAGE))
+                                                                      Ontologies.SENT_PRODUCTS_MESSAGE).serialize())
         self.pending = Graph()
         self.pending.serialize(destination=self.PENDING_FILE_NAME, format='turtle')
         return final_price_message
