@@ -16,3 +16,6 @@
 <http://www.owl-ontologies.com/Ontology1463560793.owl#User#Sergi> ns1:Direction "Barcelona" ;
     ns1:Username "Sergi" .
 
+<http://www.owl-ontologies.com/Ontology1463560793.owl#User#kami> ns1:Direction "qwe qwe" ;
+    ns1:Username "kami" .
+

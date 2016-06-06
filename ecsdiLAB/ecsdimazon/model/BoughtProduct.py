@@ -69,7 +69,6 @@ class BoughtProduct:
             }
         """
         qres = graph.query(query)
-        print len(qres)
         search_res = []
         for bp, uuid, ean, name, brand, price, weight, height, width, purcahser, sendto, payment, priority, seller, deliveryDate, sender in qres:
             search_res.append(BoughtProduct(
