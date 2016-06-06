@@ -160,14 +160,12 @@ def search_product():
             price_min = 0
         if price_max == "":
             price_max = sys.float_info.max
-
-    product_search = SearchProductsMessage(ean, name, brand, price_min, price_max)
-
-    response = requests.get(url, data=build_message(product_search.to_graph(), 'QUERY', Ontologies.SEARCH_PRODUCT_MESSAGE)
-                            .serialize(format='xml'))
-
-    print ""
     try:
+        product_search = SearchProductsMessage(ean, name, brand, price_min, price_max)
+        response = requests.get(url, data=build_message(product_search.to_graph(), 'QUERY', Ontologies.SEARCH_PRODUCT_MESSAGE)
+                                .serialize(format='xml'))
+        print
+
         products_graph = Graph().parse(data=response.text, format='xml')
         products = Product.from_graph(products_graph)
         i = 1
@@ -185,7 +183,6 @@ def search_product():
             except ValueError:
                 print "Todos los valores han de ser numericos"
     except Exception as ex:
-        print ex
         print "No hay productos que coincidan con los parametros pasados"
     print
 
