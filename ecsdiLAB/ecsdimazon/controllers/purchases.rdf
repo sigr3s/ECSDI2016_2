@@ -4,15 +4,6 @@
 @prefix xml: <http://www.w3.org/XML/1998/namespace> .
 @prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
 
-<http://www.owl-ontologies.com/Ontology1463560793.owl#BoughtProduct#138798312289779557686519690457157776989> ns1:DeliveryDate "undefined" ;
-    ns1:Payment "paypal" ;
-    ns1:Priority "high" ;
-    ns1:Product <http://www.owl-ontologies.com/Ontology1463560793.owl#Product#http://www.owl-ontologies.com/Ontology1463560793.owl#Product#2> ;
-    ns1:Purchaser "Alejandro" ;
-    ns1:SendTo "Martorell" ;
-    ns1:Sender "undefined" ;
-    ns1:Uuid 138798312289779557686519690457157776989 .
-
 <http://www.owl-ontologies.com/Ontology1463560793.owl#BoughtProduct#164383126405811895557664501993614333566> ns1:DeliveryDate "undefined" ;
     ns1:Payment "paypal" ;
     ns1:Priority "high" ;
@@ -39,15 +30,6 @@
     ns1:SendTo "Barcelona" ;
     ns1:Sender "undefined" ;
     ns1:Uuid 230248060980805160281035478060889955662 .
-
-<http://www.owl-ontologies.com/Ontology1463560793.owl#BoughtProduct#246391455526508380792922137780007438177> ns1:DeliveryDate "undefined" ;
-    ns1:Payment "paypal" ;
-    ns1:Priority "high" ;
-    ns1:Product <http://www.owl-ontologies.com/Ontology1463560793.owl#Product#http://www.owl-ontologies.com/Ontology1463560793.owl#Product#2> ;
-    ns1:Purchaser "Alejandro" ;
-    ns1:SendTo "Martorell" ;
-    ns1:Sender "undefined" ;
-    ns1:Uuid 246391455526508380792922137780007438177 .
 
 <http://www.owl-ontologies.com/Ontology1463560793.owl#BoughtProduct#259333359309398016168324320123261295725> ns1:DeliveryDate "undefined" ;
     ns1:Payment "paypal" ;
