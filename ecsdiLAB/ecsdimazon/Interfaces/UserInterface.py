@@ -54,7 +54,7 @@ def main():
 
 
 def login():
-    users = "http://localhost:" + str(Constants.PORT_AUSER) + "/comm"
+    users = auser + "/comm"
     user_msg = UserMessage(user)
     response = requests.post(users, data=build_message(user_msg.to_graph(), 'QUERY',
                                                        Ontologies.USER_MESSAGE).serialize(format='xml'))
@@ -70,7 +70,7 @@ def dictionary_to_eans_request(eans):
 
 
 def user_purchases():
-    users = "http://localhost:" + str(Constants.PORT_AUSER) + "/comm"
+    users = auser + "/comm"
     user_msg = UserMessage(user)
     response = requests.post(users, data=build_message(user_msg.to_graph(), 'QUERY',
                                                        Ontologies.USER_PRODUCTS_MESSAGE).serialize(format='xml'))
@@ -88,7 +88,7 @@ def user_purchases():
 
 def purchase_products():
     eans = []
-    purchase_url = "http://localhost:" + str(Constants.PORT_APURCHASES) + "/comm"
+    purchase_url = apurchases + "/comm"
     dictionary_to_eans_request(eans)
     product_purchase = PurchaseProductsMessage(eans, user, Constants.PRIORITY_HIGH, Constants.PAYMENT_PAYPAL)
     response = requests.post(purchase_url, data=build_message(product_purchase.to_graph(), 'BUY',
@@ -104,9 +104,9 @@ def purchase_products():
 
 
 def return_product():
-    users = "http://localhost:" + str(Constants.PORT_AUSER) + "/comm"
+    users = auser + "/comm"
     user_msg = UserMessage(user)
-    purchase_url = "http://localhost:" + str(Constants.PORT_APURCHASES) + "/comm"
+    purchase_url = apurchases + "/comm"
     response = requests.post(users, data=build_message(user_msg.to_graph(), 'QUERY',
                                                        Ontologies.USER_PRODUCTS_MESSAGE).serialize(format='xml'))
     products = []
@@ -162,7 +162,7 @@ def return_product():
 
 
 def search_product():
-    url = "http://localhost:" + str(Constants.PORT_AUSER) + "/comm"
+    url = auser + "/comm"
     print "Rellena los siguientes campos de busqueda, dejalos vacios si no quieres buscar por ese campo"
     ean = raw_input("Codigo de barras: ")
     if ean != "":
@@ -245,6 +245,11 @@ def print_product(product):
 
 
 if __name__ == "__main__":
+    if len(sys.argv) != 3:
+        print "USAGE: python UserInteface {AUSER_URI} {APURCHASES_URI}"
+        exit(-1)
+    auser = sys.argv[1]
+    apurchases = sys.argv[1]
     global cart
     cart = {}
     main()

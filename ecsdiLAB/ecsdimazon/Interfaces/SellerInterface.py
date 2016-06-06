@@ -39,7 +39,7 @@ def enter_seller_information():
 def create_product(seller):
     try :
         print "Introduzca los parametros del producto"
-        url = "http://localhost:" + str(Constants.PORT_AUPDATER) + "/comm"
+        url = aupdater + "/comm"
 
         correct = False
         while not correct:
@@ -136,4 +136,8 @@ def create_product(seller):
 
 
 if __name__ == "__main__":
+    if len(sys.argv) != 2:
+        print "USAGE: python SellerInterface {AUPDATER_URI}"
+        exit(-1)
+    aupdater = sys.argv[1]
     main()
