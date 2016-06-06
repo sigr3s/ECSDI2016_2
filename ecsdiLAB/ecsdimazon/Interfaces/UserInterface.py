@@ -97,11 +97,8 @@ def purchase_products():
     if response.status_code == 200:
         products_graph = Graph().parse(data=response.text, format='xml')
         products = BoughtProduct.from_graph(products_graph)
-        totalPrice = 0
         for product in products:
             print print_product(product.product) + ", uuid: " + str(product.uuid)
-            totalPrice += product.price
-        print "Precio total de compra: " + str(totalPrice)
         global cart
         cart = {}
 
@@ -186,11 +183,11 @@ def search_product():
         price_min = raw_input("Precio minimo de busqueda: ")
         price_max = raw_input("Precio maximo de busqueda: ")
         if price_min == "":
-            price_min = '0'
+            price_min = 0
         if price_max == "":
-            price_max = str(sys.float_info.max)
+            price_max = sys.float_info.max
     try:
-        product_search = SearchProductsMessage(ean, name.strip(), brand.strip(), price_min.strip(), price_max.strip())
+        product_search = SearchProductsMessage(ean, name.strip(), brand.strip(), price_min, price_max)
         response = requests.get(url, data=build_message(product_search.to_graph(), 'QUERY', Ontologies.SEARCH_PRODUCT_MESSAGE)
                                 .serialize(format='xml'))
         print
