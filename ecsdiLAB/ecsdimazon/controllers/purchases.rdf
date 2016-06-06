@@ -22,6 +22,15 @@
     ns1:Sender "SehOor" ;
     ns1:Uuid 32566197562887627381408970617407633198 .
 
+<http://www.owl-ontologies.com/Ontology1463560793.owl#BoughtProduct#62691472904952642209565272958998079681> ns1:DeliveryDate "2016-05-07T17:13:11.318000"^^xsd:dateTime ;
+    ns1:Payment "paypal" ;
+    ns1:Priority "high" ;
+    ns1:Product <http://www.owl-ontologies.com/Ontology1463560793.owl#Product#http://www.owl-ontologies.com/Ontology1463560793.owl#Product#4> ;
+    ns1:Purchaser "Alejandro" ;
+    ns1:SendTo "Martorell" ;
+    ns1:Sender "SehOor" ;
+    ns1:Uuid 62691472904952642209565272958998079681 .
+
 <http://www.owl-ontologies.com/Ontology1463560793.owl#BoughtProduct#62691472904952642209565272958998079681> ns1:DeliveryDate "2016-06-07T17:13:11.318000"^^xsd:dateTime ;
     ns1:Payment "paypal" ;
     ns1:Priority "high" ;

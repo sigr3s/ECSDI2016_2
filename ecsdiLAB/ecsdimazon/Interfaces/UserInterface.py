@@ -97,8 +97,11 @@ def purchase_products():
     if response.status_code == 200:
         products_graph = Graph().parse(data=response.text, format='xml')
         products = BoughtProduct.from_graph(products_graph)
+        totalPrice = 0
         for product in products:
             print print_product(product.product) + ", uuid: " + str(product.uuid)
+            totalPrice += product.price
+        print "Precio total de compra: " + str(totalPrice)
         global cart
         cart = {}
 
@@ -118,7 +121,7 @@ def return_product():
         print
         return
     for i, product in products:
-        print "{} - {}".format(i+1, product.name)
+        print "{}. {} Fecha de entrega: {}".format(i+1, product.name, product.delivery_date)
     print "Escribe el id (primer numero) del producto a devolver"
     idx = raw_input("")
     try:
