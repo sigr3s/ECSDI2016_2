@@ -112,6 +112,7 @@ def return_product():
         products_graph = Graph().parse(data=response.text, format='xml')
         products = list(enumerate(BoughtProductResponse.from_graph(products_graph)))
     except:
+        print "No tienes productos para devolver"
         return
     for i, product in products:
         print "{} - {}".format(i, product.name)

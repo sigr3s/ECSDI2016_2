@@ -4,19 +4,11 @@
 @prefix xml: <http://www.w3.org/XML/1998/namespace> .
 @prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
 
-<http://www.owl-ontologies.com/Ontology1463560793.owl#BoughtProduct#178964810921217296639883906219772424430> ns1:Product "http://www.owl-ontologies.com/Ontology1463560793.owl#Product#http://www.owl-ontologies.com/Ontology1463560793.owl#Product#1" ;
-    ns1:Purchaser "aleixet" ;
-    ns1:Reason "3. No me satisface (solo aplica los primeros 15 dias)" .
-
-<http://www.owl-ontologies.com/Ontology1463560793.owl#BoughtProduct#214657933779940291255019846809803260324> ns1:Product "http://www.owl-ontologies.com/Ontology1463560793.owl#Product#http://www.owl-ontologies.com/Ontology1463560793.owl#Product#1" ;
-    ns1:Purchaser "sigr3s" ;
-    ns1:Reason "3. No me satisface (solo aplica los primeros 15 dias)" .
-
-<http://www.owl-ontologies.com/Ontology1463560793.owl#BoughtProduct#255754021542110622959805511708260756438> ns1:Product "http://www.owl-ontologies.com/Ontology1463560793.owl#Product#http://www.owl-ontologies.com/Ontology1463560793.owl#Product#1" ;
-    ns1:Purchaser "sigr3s" ;
-    ns1:Reason "3. No me satisface (solo aplica los primeros 15 dias)" .
-
-<http://www.owl-ontologies.com/Ontology1463560793.owl#BoughtProduct#62834138647114778470796606659389122732> ns1:Product "http://www.owl-ontologies.com/Ontology1463560793.owl#Product#http://www.owl-ontologies.com/Ontology1463560793.owl#Product#1" ;
-    ns1:Purchaser "sigr3s" ;
+<http://www.owl-ontologies.com/Ontology1463560793.owl#BoughtProduct#66627015328574571906804261248534092814> ns1:Product "http://www.owl-ontologies.com/Ontology1463560793.owl#Product#http://www.owl-ontologies.com/Ontology1463560793.owl#Product#101" ;
+    ns1:Purchaser "Sergi" ;
     ns1:Reason "2. Producto equivocado." .
+
+<http://www.owl-ontologies.com/Ontology1463560793.owl#BoughtProduct#94034584127917823510384084100610377749> ns1:Product "http://www.owl-ontologies.com/Ontology1463560793.owl#Product#http://www.owl-ontologies.com/Ontology1463560793.owl#Product#4" ;
+    ns1:Purchaser "Alejandro" ;
+    ns1:Reason "3. No me satisface (solo aplica los primeros 15 dias)" .
 
