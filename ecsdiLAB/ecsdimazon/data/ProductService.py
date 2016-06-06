@@ -127,12 +127,12 @@ class ProductService:
     def return_prod(self, uuid, user, reason):
         n = Namespace(Constants.NAMESPACE)
         uri = n.__getattr__('#BoughtProduct#' + str(uuid))
-        if not (uri, FOAF.Purchaser, user) in self.purchases:
+        if not (uri, FOAF.Purchaser, Literal(user)) in self.purchases:
             return build_message(Graph(), FIPAACLPerformatives.REFUSE, Ontologies.RETURN_PRODUCT_MESSAGE).serialize()
         if reason == Constants.REASON_NON_SATISFACTORY:
-            for s, p, o in self.purchases.triples(uri, FOAF.DeliveryDate, None):
+            for s, p, o in self.purchases.triples((uri, FOAF.DeliveryDate, None)):
                 delivery_date = datetime.datetime.strptime(o, "%Y-%m-%dT%H:%M:%S.%f")
-                if (datetime.datetime.now() - datetime.timedelta(days=15)) < delivery_date:
+                if (datetime.datetime.now() - datetime.timedelta(days=15)) > delivery_date:
                     return build_message(Graph(), FIPAACLPerformatives.REFUSE,
                                          Ontologies.RETURN_PRODUCT_MESSAGE).serialize()
         for s, p, o in self.purchases.triples((uri, FOAF.Product, None)):

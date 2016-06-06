@@ -39,4 +39,4 @@ class ReturnProductsMessage:
         """
         qres = graph.query(query)
         for p, uuid, purchaser, reason in qres:
-            return ReturnProductsMessage(uuid, purchaser, reason)
+            return ReturnProductsMessage(uuid.toPython(), purchaser.toPython(), reason.toPython())
