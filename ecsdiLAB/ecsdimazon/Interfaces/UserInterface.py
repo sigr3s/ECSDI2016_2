@@ -113,6 +113,7 @@ def return_product():
         products = list(enumerate(BoughtProductResponse.from_graph(products_graph)))
     except:
         print "No tienes productos para devolver"
+        print
         return
     for i, product in products:
         print "{} - {}".format(i, product.name)
