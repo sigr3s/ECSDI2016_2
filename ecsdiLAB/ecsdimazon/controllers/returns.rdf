@@ -4,11 +4,7 @@
 @prefix xml: <http://www.w3.org/XML/1998/namespace> .
 @prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
 
-<http://www.owl-ontologies.com/Ontology1463560793.owl#BoughtProduct#27570789154411235574432181987018332211> ns1:Product "http://www.owl-ontologies.com/Ontology1463560793.owl#Product#http://www.owl-ontologies.com/Ontology1463560793.owl#Product#1" ;
+<http://www.owl-ontologies.com/Ontology1463560793.owl#BoughtProduct#44838383029065039669259482962578803532> ns1:Product "http://www.owl-ontologies.com/Ontology1463560793.owl#Product#http://www.owl-ontologies.com/Ontology1463560793.owl#Product#1" ;
     ns1:Purchaser "Sergi" ;
-    ns1:Reason "3. No me satisface (solo aplica los primeros 15 dias)" .
-
-<http://www.owl-ontologies.com/Ontology1463560793.owl#BoughtProduct#315037518937547135044879653030201051124> ns1:Product "http://www.owl-ontologies.com/Ontology1463560793.owl#Product#http://www.owl-ontologies.com/Ontology1463560793.owl#Product#1" ;
-    ns1:Purchaser "Alejandro" ;
-    ns1:Reason "3. No me satisface (solo aplica los primeros 15 dias)" .
+    ns1:Reason "1. Producto defectuoso." .
 

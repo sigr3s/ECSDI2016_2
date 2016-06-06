@@ -5,10 +5,10 @@
 @prefix xml: <http://www.w3.org/XML/1998/namespace> .
 @prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
 
-acl:message-693deaf0-1d43-4fb7-b7ed-6f948d5bfa02 a acl:FipaAclMessage ;
+acl:message-118bd1f4-d6b0-4b5a-a2ad-fd8e9e29d659 a acl:FipaAclMessage ;
     acl:sender "None" .
 
-<http://www.owl-ontologies.com/Ontology1463560793.owl#BoughtProduct#125857807011495133173075634294067045537> ns1:Brand <http://www.owl-ontologies.com/Ontology1463560793.owl#Brand#http://www.owl-ontologies.com/Ontology1463560793.owl#Brand#BuggiSoft> ;
+<http://www.owl-ontologies.com/Ontology1463560793.owl#BoughtProduct#186265519691011936637696158594781822696> ns1:Brand <http://www.owl-ontologies.com/Ontology1463560793.owl#Brand#http://www.owl-ontologies.com/Ontology1463560793.owl#Brand#BuggiSoft> ;
     ns1:DeliveryDate "undefined" ;
     ns1:EAN 8 ;
     ns1:Height 0e+00 ;
@@ -20,11 +20,11 @@ acl:message-693deaf0-1d43-4fb7-b7ed-6f948d5bfa02 a acl:FipaAclMessage ;
     ns1:Seller <http://www.owl-ontologies.com/Ontology1463560793.owl#Seller#http://www.owl-ontologies.com/Ontology1463560793.owl#Seller#ECSDI> ;
     ns1:SendTo "Tortosa" ;
     ns1:Sender "undefined" ;
-    ns1:Uuid 125857807011495133173075634294067045537 ;
+    ns1:Uuid 186265519691011936637696158594781822696 ;
     ns1:Weight 0e+00 ;
     ns1:Width 0e+00 .
 
-<http://www.owl-ontologies.com/Ontology1463560793.owl#BoughtProduct#287527236200503168055252700662873849764> ns1:Brand <http://www.owl-ontologies.com/Ontology1463560793.owl#Brand#http://www.owl-ontologies.com/Ontology1463560793.owl#Brand#BuggiSoft> ;
+<http://www.owl-ontologies.com/Ontology1463560793.owl#BoughtProduct#271429788131692899108626262066859831604> ns1:Brand <http://www.owl-ontologies.com/Ontology1463560793.owl#Brand#http://www.owl-ontologies.com/Ontology1463560793.owl#Brand#BuggiSoft> ;
     ns1:DeliveryDate "undefined" ;
     ns1:EAN 8 ;
     ns1:Height 0e+00 ;
@@ -36,7 +36,7 @@ acl:message-693deaf0-1d43-4fb7-b7ed-6f948d5bfa02 a acl:FipaAclMessage ;
     ns1:Seller <http://www.owl-ontologies.com/Ontology1463560793.owl#Seller#http://www.owl-ontologies.com/Ontology1463560793.owl#Seller#ECSDI> ;
     ns1:SendTo "Tortosa" ;
     ns1:Sender "undefined" ;
-    ns1:Uuid 287527236200503168055252700662873849764 ;
+    ns1:Uuid 271429788131692899108626262066859831604 ;
     ns1:Weight 0e+00 ;
     ns1:Width 0e+00 .
 
