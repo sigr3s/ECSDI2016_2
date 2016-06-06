@@ -30,8 +30,10 @@ def enter_seller_information():
     while not valid_seller:
         seller = raw_input("vendedor: ")
         seller = seller.strip()
-        if seller != "":
+        if seller != "" and seller.find(" ") == -1:
             valid_seller = True
+        else :
+            print "El vendedor no puede estar vacio ni contener espacios"
     return seller
 
 def create_product(seller):
@@ -44,6 +46,7 @@ def create_product(seller):
             try:
                 ean = raw_input("codigo de barras: ")
                 while (ean.strip() == "" or int(ean) <= 0):
+                    print "El codigo de barras no puede estar vacio"
                     ean = raw_input("codigo de barras: ")
                 correct = True
             except ValueError as ve:
@@ -51,17 +54,22 @@ def create_product(seller):
 
         name = raw_input("nombre: ")
         while name.strip() == "" :
+            print "El nombre no puede estar vacio"
             name = raw_input("nombre: ")
 
         brand = raw_input("marca: ")
-        while brand.strip() == "":
+        brand = brand.strip()
+        while brand != "" and brand.find(" ") != -1:
+            print "La marca no puede estar vacia ni contener espacios"
             brand = raw_input("marca: ")
+            brand = brand.strip()
 
         correct = False
         while not correct:
             try:
                 price = raw_input("precio: ")
-                while (price.strip() == "" or int(price) <= 0):
+                while (price.strip() == "" or float(price) < 0):
+                    print "El precio no puede estar vacio"
                     price = raw_input("precio: ")
                 correct = True
             except ValueError as ve:
@@ -71,7 +79,8 @@ def create_product(seller):
         while not correct:
             try:
                 height = raw_input("altura: ")
-                while (height.strip() == "" or int(height) <= 0):
+                while (height.strip() == "" or float(height) < 0):
+                    print "La altura no puede estar vacia"
                     height = raw_input("altura: ")
                 correct = True
             except ValueError as ve:
@@ -81,7 +90,8 @@ def create_product(seller):
         while not correct:
             try:
                 width = raw_input("anchura: ")
-                while (width.strip() == "" or int(width) <= 0):
+                while (width.strip() == "" or float(width) < 0):
+                    print "La anchura no puede estar vacia"
                     width = raw_input("anchura: ")
                 correct = True
             except ValueError as ve:
@@ -91,7 +101,8 @@ def create_product(seller):
         while not correct:
             try:
                 weight = raw_input("peso: ")
-                while (weight.strip() == "" or int(weight) <= 0):
+                while (weight.strip() == "" or float(weight) < 0):
+                    print "El peso no puede estar vacio"
                     weight = raw_input("peso: ")
                 correct = True
             except ValueError as ve:
