@@ -4,21 +4,15 @@
 @prefix xml: <http://www.w3.org/XML/1998/namespace> .
 @prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
 
-<http://www.owl-ontologies.com/Ontology1463560793.owl#User#Kamitachi> ns1:Direction "SAO" ;
-    ns1:Username "Kamitachi" .
+<http://www.owl-ontologies.com/Ontology1463560793.owl#User#Aleix> ns1:Direction "Tortosa" ;
+    ns1:Username "Aleix" .
 
-<http://www.owl-ontologies.com/Ontology1463560793.owl#User#Oriol> ns1:Direction "WD" ;
+<http://www.owl-ontologies.com/Ontology1463560793.owl#User#Alejandro> ns1:Direction "Martorell" ;
+    ns1:Username "Alejandro" .
+
+<http://www.owl-ontologies.com/Ontology1463560793.owl#User#Oriol> ns1:Direction "Tortosa" ;
     ns1:Username "Oriol" .
 
-<http://www.owl-ontologies.com/Ontology1463560793.owl#User#aleixet> ns1:Direction "bcn" ;
-    ns1:Username "aleixet" .
-
-<http://www.owl-ontologies.com/Ontology1463560793.owl#User#juju> ns1:Direction "caca" ;
-    ns1:Username "juju" .
-
-<http://www.owl-ontologies.com/Ontology1463560793.owl#User#oriol> ns1:Direction "caca" ;
-    ns1:Username "oriol" .
-
-<http://www.owl-ontologies.com/Ontology1463560793.owl#User#sigr3s> ns1:Direction "ope" ;
-    ns1:Username "sigr3s" .
+<http://www.owl-ontologies.com/Ontology1463560793.owl#User#Sergi> ns1:Direction "Barcelona" ;
+    ns1:Username "Sergi" .
 

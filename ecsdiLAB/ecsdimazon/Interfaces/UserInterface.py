@@ -19,8 +19,11 @@ from ecsdiLAB.ecsdimazon.model.User import User
 def main():
     global user
     username = raw_input("Nombre del usuario que usara el sistema: ")
+    while username.strip().find(" ") != -1:
+        print "El nombre de usuario no puede contener espacios"
+        username = raw_input("Nombre del usuario que usara el sistema: ")
     direccion = raw_input("Direccion del usuario: ")
-    user = User(username, direccion)
+    user = User(username.strip(), direccion)
     login()
     option = -1
     while option != 0:
