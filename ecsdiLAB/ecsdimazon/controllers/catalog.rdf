@@ -114,12 +114,12 @@
 
 <http://www.owl-ontologies.com/Ontology1463560793.owl#Product#888> ns1:Brand <http://www.owl-ontologies.com/Ontology1463560793.owl#Brand#Bugisoft> ;
     ns1:EAN 888 ;
-    ns1:Height 8.2e+00 ;
-    ns1:Name "Khal of diuti 4" ;
+    ns1:Height 5e-01 ;
+    ns1:Name "Kol off duti" ;
     ns1:Price 1e+02 ;
     ns1:Seller <http://www.owl-ontologies.com/Ontology1463560793.owl#Seller#1pese> ;
-    ns1:Weight 1.53e+01 ;
-    ns1:Width 9e-02 .
+    ns1:Weight 1.2e+00 ;
+    ns1:Width 5e-02 .
 
 <http://www.owl-ontologies.com/Ontology1463560793.owl#Product#9> ns1:Brand <http://www.owl-ontologies.com/Ontology1463560793.owl#Brand#BuggiSoft> ;
     ns1:EAN 9 ;

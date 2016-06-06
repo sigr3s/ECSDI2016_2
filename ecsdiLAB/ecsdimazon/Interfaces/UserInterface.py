@@ -146,7 +146,7 @@ def return_product():
         print "WRONG! Try again."
         return_product()
     try:
-        return_prod = ReturnProductsMessage(products.get(int(idx)).uuid, user.username, Constants.REASON_DICT[int(reason)])
+        return_prod = ReturnProductsMessage(products.get(int(idx)-1).uuid, user.username, Constants.REASON_DICT[int(reason)])
         response = requests.post(purchase_url, data=build_message(return_prod.to_graph(), FIPAACLPerformatives.REQUEST,
                                                                   Ontologies.RETURN_PRODUCT_MESSAGE).serialize(
                                                                   format='xml'))
@@ -156,7 +156,8 @@ def return_product():
             return
         else:
             print "Han pasado ya 15 dias para tu motivo, no puedes devolver el producto."
-    except:
+    except Exception as ex:
+        print ex
         print "Error al devolver."
     print
 
