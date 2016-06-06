@@ -13,6 +13,15 @@
     ns1:Sender "undefined" ;
     ns1:Uuid 164383126405811895557664501993614333566 .
 
+<http://www.owl-ontologies.com/Ontology1463560793.owl#BoughtProduct#170737562617055993604215053844222203257> ns1:DeliveryDate "undefined" ;
+    ns1:Payment "paypal" ;
+    ns1:Priority "high" ;
+    ns1:Product <http://www.owl-ontologies.com/Ontology1463560793.owl#Product#http://www.owl-ontologies.com/Ontology1463560793.owl#Product#100> ;
+    ns1:Purchaser "Aleix" ;
+    ns1:SendTo "Tortosa" ;
+    ns1:Sender "undefined" ;
+    ns1:Uuid 170737562617055993604215053844222203257 .
+
 <http://www.owl-ontologies.com/Ontology1463560793.owl#BoughtProduct#175372137006064930290333331774029513361> ns1:DeliveryDate "undefined" ;
     ns1:Payment "paypal" ;
     ns1:Priority "high" ;
@@ -58,6 +67,15 @@
     ns1:Sender "undefined" ;
     ns1:Uuid 307680538844920876955687202032787476463 .
 
+<http://www.owl-ontologies.com/Ontology1463560793.owl#BoughtProduct#324573208428011779893305019846219081525> ns1:DeliveryDate "undefined" ;
+    ns1:Payment "paypal" ;
+    ns1:Priority "high" ;
+    ns1:Product <http://www.owl-ontologies.com/Ontology1463560793.owl#Product#http://www.owl-ontologies.com/Ontology1463560793.owl#Product#8> ;
+    ns1:Purchaser "Aleix" ;
+    ns1:SendTo "Tortosa" ;
+    ns1:Sender "undefined" ;
+    ns1:Uuid 324573208428011779893305019846219081525 .
+
 <http://www.owl-ontologies.com/Ontology1463560793.owl#BoughtProduct#338882011963326996617817563771038791971> ns1:DeliveryDate "undefined" ;
     ns1:Payment "paypal" ;
     ns1:Priority "high" ;
@@ -66,4 +84,13 @@
     ns1:SendTo "Martorell" ;
     ns1:Sender "undefined" ;
     ns1:Uuid 338882011963326996617817563771038791971 .
+
+<http://www.owl-ontologies.com/Ontology1463560793.owl#BoughtProduct#54838389649593412696487905056251675417> ns1:DeliveryDate "undefined" ;
+    ns1:Payment "paypal" ;
+    ns1:Priority "high" ;
+    ns1:Product <http://www.owl-ontologies.com/Ontology1463560793.owl#Product#http://www.owl-ontologies.com/Ontology1463560793.owl#Product#100> ;
+    ns1:Purchaser "Aleix" ;
+    ns1:SendTo "Tortosa" ;
+    ns1:Sender "undefined" ;
+    ns1:Uuid 54838389649593412696487905056251675417 .
 
