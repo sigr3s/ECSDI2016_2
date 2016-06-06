@@ -1,0 +1,42 @@
+@prefix acl: <http://www.nuin.org/ontology/fipa/acl#> .
+@prefix ns1: <http://xmlns.com/foaf/0.1/> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix xml: <http://www.w3.org/XML/1998/namespace> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+
+acl:message-693deaf0-1d43-4fb7-b7ed-6f948d5bfa02 a acl:FipaAclMessage ;
+    acl:sender "None" .
+
+<http://www.owl-ontologies.com/Ontology1463560793.owl#BoughtProduct#125857807011495133173075634294067045537> ns1:Brand <http://www.owl-ontologies.com/Ontology1463560793.owl#Brand#http://www.owl-ontologies.com/Ontology1463560793.owl#Brand#BuggiSoft> ;
+    ns1:DeliveryDate "undefined" ;
+    ns1:EAN 8 ;
+    ns1:Height 0e+00 ;
+    ns1:Name "DLC2" ;
+    ns1:Payment "paypal" ;
+    ns1:Price 3.05e+01 ;
+    ns1:Priority "high" ;
+    ns1:Purchaser "Aleix" ;
+    ns1:Seller <http://www.owl-ontologies.com/Ontology1463560793.owl#Seller#http://www.owl-ontologies.com/Ontology1463560793.owl#Seller#ECSDI> ;
+    ns1:SendTo "Tortosa" ;
+    ns1:Sender "undefined" ;
+    ns1:Uuid 125857807011495133173075634294067045537 ;
+    ns1:Weight 0e+00 ;
+    ns1:Width 0e+00 .
+
+<http://www.owl-ontologies.com/Ontology1463560793.owl#BoughtProduct#287527236200503168055252700662873849764> ns1:Brand <http://www.owl-ontologies.com/Ontology1463560793.owl#Brand#http://www.owl-ontologies.com/Ontology1463560793.owl#Brand#BuggiSoft> ;
+    ns1:DeliveryDate "undefined" ;
+    ns1:EAN 8 ;
+    ns1:Height 0e+00 ;
+    ns1:Name "DLC2" ;
+    ns1:Payment "paypal" ;
+    ns1:Price 3.05e+01 ;
+    ns1:Priority "high" ;
+    ns1:Purchaser "Aleix" ;
+    ns1:Seller <http://www.owl-ontologies.com/Ontology1463560793.owl#Seller#http://www.owl-ontologies.com/Ontology1463560793.owl#Seller#ECSDI> ;
+    ns1:SendTo "Tortosa" ;
+    ns1:Sender "undefined" ;
+    ns1:Uuid 287527236200503168055252700662873849764 ;
+    ns1:Weight 0e+00 ;
+    ns1:Width 0e+00 .
+
