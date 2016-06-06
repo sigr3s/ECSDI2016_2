@@ -250,7 +250,7 @@ if __name__ == "__main__":
         print "USAGE: python UserInteface {AUSER_URI} {APURCHASES_URI}"
         exit(-1)
     auser = sys.argv[1]
-    apurchases = sys.argv[1]
+    apurchases = sys.argv[2]
     global cart
     cart = {}
     main()
