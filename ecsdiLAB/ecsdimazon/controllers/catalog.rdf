@@ -22,6 +22,33 @@
     ns1:Weight 2e+01 ;
     ns1:Width 1.2e+00 .
 
+<http://www.owl-ontologies.com/Ontology1463560793.owl#Product#123> ns1:Brand <http://www.owl-ontologies.com/Ontology1463560793.owl#Brand#marqueta> ;
+    ns1:EAN 123 ;
+    ns1:Height 1.298e+03 ;
+    ns1:Name "sde" ;
+    ns1:Price 9e+01 ;
+    ns1:Seller <http://www.owl-ontologies.com/Ontology1463560793.owl#Seller#aleixetCompany> ;
+    ns1:Weight 8.23e+02 ;
+    ns1:Width 3.84e+02 .
+
+<http://www.owl-ontologies.com/Ontology1463560793.owl#Product#1234> ns1:Brand <http://www.owl-ontologies.com/Ontology1463560793.owl#Brand#1234> ;
+    ns1:EAN 1234 ;
+    ns1:Height 1.234e+03 ;
+    ns1:Name "1234" ;
+    ns1:Price 1.234e+03 ;
+    ns1:Seller <http://www.owl-ontologies.com/Ontology1463560793.owl#Seller#aleoxeeeet> ;
+    ns1:Weight 1.234e+03 ;
+    ns1:Width 1.234e+03 .
+
+<http://www.owl-ontologies.com/Ontology1463560793.owl#Product#12345> ns1:Brand <http://www.owl-ontologies.com/Ontology1463560793.owl#Brand#marca> ;
+    ns1:EAN 12345 ;
+    ns1:Height 1.234e+03 ;
+    ns1:Name "Caca de vaca" ;
+    ns1:Price 1.234e+03 ;
+    ns1:Seller <http://www.owl-ontologies.com/Ontology1463560793.owl#Seller#aleixet> ;
+    ns1:Weight 1.234e+03 ;
+    ns1:Width 4.321e+03 .
+
 <http://www.owl-ontologies.com/Ontology1463560793.owl#Product#2> ns1:Brand <http://www.owl-ontologies.com/Ontology1463560793.owl#Brand#NotGoogle> ;
     ns1:EAN 2 ;
     ns1:Height 3e-02 ;
@@ -93,3 +120,13 @@
     ns1:Seller <http://www.owl-ontologies.com/Ontology1463560793.owl#Seller#ECSDIMAZON> ;
     ns1:Weight 0e+00 ;
     ns1:Width 0e+00 .
+
+<http://www.owl-ontologies.com/Ontology1463560793.owl#Product#98123> ns1:Brand <http://www.owl-ontologies.com/Ontology1463560793.owl#Brand#123> ;
+    ns1:EAN 98123 ;
+    ns1:Height 1.234e+03 ;
+    ns1:Name "2903f9oju9o3hio" ;
+    ns1:Price 7.777e+03 ;
+    ns1:Seller <http://www.owl-ontologies.com/Ontology1463560793.owl#Seller#aleixeet> ;
+    ns1:Weight 1.234e+03 ;
+    ns1:Width 1.234e+03 .
+

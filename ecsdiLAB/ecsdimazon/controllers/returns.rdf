@@ -4,6 +4,10 @@
 @prefix xml: <http://www.w3.org/XML/1998/namespace> .
 @prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
 
+<http://www.owl-ontologies.com/Ontology1463560793.owl#BoughtProduct#178964810921217296639883906219772424430> ns1:Product "http://www.owl-ontologies.com/Ontology1463560793.owl#Product#http://www.owl-ontologies.com/Ontology1463560793.owl#Product#1" ;
+    ns1:Purchaser "aleixet" ;
+    ns1:Reason "3. No me satisface (solo aplica los primeros 15 dias)" .
+
 <http://www.owl-ontologies.com/Ontology1463560793.owl#BoughtProduct#214657933779940291255019846809803260324> ns1:Product "http://www.owl-ontologies.com/Ontology1463560793.owl#Product#http://www.owl-ontologies.com/Ontology1463560793.owl#Product#1" ;
     ns1:Purchaser "sigr3s" ;
     ns1:Reason "3. No me satisface (solo aplica los primeros 15 dias)" .

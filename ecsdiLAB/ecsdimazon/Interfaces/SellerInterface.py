@@ -9,15 +9,16 @@ from ecsdiLAB.ecsdimazon.model.Product import Product
 
 
 def main():
+    print "Introduzca su nombre de vendedor"
     seller = enter_seller_information()
     system_exit = False
     while not system_exit:
         create_product(seller)
         correct_response = False
         while not correct_response:
-            system_exit = raw_input("Salir? (y/n) ")
-            if system_exit == 'y' or system_exit == 'n':
-                if system_exit == 'y':
+            system_exit = raw_input("Salir? (s/n) ")
+            if system_exit == 's' or system_exit == 'n':
+                if system_exit == 's':
                     system_exit = True
                 else:
                     system_exit = False
@@ -27,21 +28,74 @@ def enter_seller_information():
     seller = ""
     valid_seller = False
     while not valid_seller:
-        seller = raw_input("seller: ")
+        seller = raw_input("vendedor: ")
+        seller = seller.strip()
         if seller != "":
             valid_seller = True
     return seller
 
 def create_product(seller):
     try :
+        print "Introduzca los parametros del producto"
         url = "http://localhost:" + str(Constants.PORT_AUPDATER) + "/comm"
-        ean = raw_input("ean: ")
-        name = raw_input("name: ")
-        brand = raw_input("brand: ")
-        price = raw_input("price: ")
-        height = raw_input("height: ")
-        width = raw_input("width: ")
-        weight = raw_input("weight: ")
+
+        correct = False
+        while not correct:
+            try:
+                ean = raw_input("codigo de barras: ")
+                while (ean.strip() == "" or int(ean) <= 0):
+                    ean = raw_input("codigo de barras: ")
+                correct = True
+            except ValueError as ve:
+                print "El codigo de barras tiene que ser un entero positivo"
+
+        name = raw_input("nombre: ")
+        while name.strip() == "" :
+            name = raw_input("nombre: ")
+
+        brand = raw_input("marca: ")
+        while brand.strip() == "":
+            brand = raw_input("marca: ")
+
+        correct = False
+        while not correct:
+            try:
+                price = raw_input("precio: ")
+                while (price.strip() == "" or int(price) <= 0):
+                    price = raw_input("precio: ")
+                correct = True
+            except ValueError as ve:
+                print "El precio tiene que ser un real positivo"
+
+        correct = False
+        while not correct:
+            try:
+                height = raw_input("altura: ")
+                while (height.strip() == "" or int(height) <= 0):
+                    height = raw_input("altura: ")
+                correct = True
+            except ValueError as ve:
+                print "La altura tiene que ser un real positivo"
+
+        correct = False
+        while not correct:
+            try:
+                width = raw_input("anchura: ")
+                while (width.strip() == "" or int(width) <= 0):
+                    width = raw_input("anchura: ")
+                correct = True
+            except ValueError as ve:
+                print "La anchura tiene que ser un real positivo"
+
+        correct = False
+        while not correct:
+            try:
+                weight = raw_input("peso: ")
+                while (weight.strip() == "" or int(weight) <= 0):
+                    weight = raw_input("peso: ")
+                correct = True
+            except ValueError as ve:
+                print "El peso tiene que ser un real positivo"
 
         product_upload = UploadProductMessage(int(ean), name, brand, float(price), float(height), float(width), float(weight), seller)
 
