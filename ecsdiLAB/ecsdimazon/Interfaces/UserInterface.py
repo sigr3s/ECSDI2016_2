@@ -36,19 +36,21 @@ def main():
         print
         try:
             option = int(option)
+
+            if option not in [0, 1, 2, 3, 4]:
+                print "Opcion incorrecta"
+            else:
+                if option == 1:
+                    search_product()
+                if option == 2:
+                    show_cart()
+                if option == 3:
+                    return_product()
+                if option == 4:
+                    user_purchases()
         except ValueError:
-            pass
-        if option not in [0, 1, 2, 3, 4]:
-            print "Opcion incorrecta"
-        else:
-            if option == 1:
-                search_product()
-            if option == 2:
-                show_cart()
-            if option == 3:
-                return_product()
-            if option == 4:
-                user_purchases()
+            print "Este valor ha de ser numerico"
+        print
 
 
 def login():
@@ -116,11 +118,17 @@ def return_product():
         print
         return
     for i, product in products:
-        print "{} - {}".format(i, product.name)
+        print "{} - {}".format(i+1, product.name)
     print "Escribe el id (primer numero) del producto a devolver"
     idx = raw_input("")
+    try:
+        int(idx)
+    except:
+        print "Este valor ha de ser numerico"
+        print
+        return
     products = dict(products)
-    if not products.get(int(idx)):
+    if not products.get(int(idx)-1):
         print "WRONG! Try again."
         return_product()
     print "Selecciona el motivo de tu devolucion:"
@@ -128,6 +136,12 @@ def return_product():
     print Constants.REASON_DICT[2]
     print Constants.REASON_DICT[3]
     reason = raw_input("")
+    try:
+        int(reason)
+    except:
+        print "Este valor ha de ser numerico"
+        print
+        return
     if reason not in ['1', '2', '3']:
         print "WRONG! Try again."
         return_product()
@@ -151,22 +165,29 @@ def search_product():
     url = "http://localhost:" + str(Constants.PORT_AUSER) + "/comm"
     print "Rellena los siguientes campos de busqueda, dejalos vacios si no quieres buscar por ese campo"
     ean = raw_input("Codigo de barras: ")
-    name = ''
-    brand = ''
-    price_min = 0
-    price_max = sys.float_info.max
-    if ean == "":
+    if ean != "":
+        try:
+            int(ean)
+        except ValueError:
+            print "El codigo de barras ha de ser numerico"
+            print
+            return
+        name = ''
+        brand = ''
+        price_min = 0
+        price_max = sys.float_info.max
+    else:
         ean = None
         name = raw_input("Nombre: ")
         brand = raw_input("Marca: ")
         price_min = raw_input("Precio minimo de busqueda: ")
         price_max = raw_input("Precio maximo de busqueda: ")
         if price_min == "":
-            price_min = 0
+            price_min = '0'
         if price_max == "":
-            price_max = sys.float_info.max
+            price_max = str(sys.float_info.max)
     try:
-        product_search = SearchProductsMessage(ean, name, brand, price_min, price_max)
+        product_search = SearchProductsMessage(ean, name.strip(), brand.strip(), price_min.strip(), price_max.strip())
         response = requests.get(url, data=build_message(product_search.to_graph(), 'QUERY', Ontologies.SEARCH_PRODUCT_MESSAGE)
                                 .serialize(format='xml'))
         print
@@ -188,6 +209,7 @@ def search_product():
             except ValueError:
                 print "Todos los valores han de ser numericos"
     except Exception as ex:
+        print ex
         print "No hay productos que coincidan con los parametros pasados"
     print
 
