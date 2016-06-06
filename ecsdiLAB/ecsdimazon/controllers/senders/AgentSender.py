@@ -41,7 +41,7 @@ class AgentSender:
             return build_message(Graph(), FIPAACLPerformatives.NOT_UNDERSTOOD, Ontologies.UNKNOWN_ONTOLOGY).serialize()
 
     def send_products(self, graph):
-        ontology = Ontologies.SENDERS_NEGOTIATION_RESPONSE
+        ontology = Ontologies.SENDERS_SEND_PRODUCT_RESPONSE
         performative = FIPAACLPerformatives.AGREE
         price = self.__total_price__(graph)
         graph = Graph()
