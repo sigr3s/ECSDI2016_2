@@ -45,7 +45,7 @@ def search_products(graph):
     return Product.list_to_graph(searched_products).serialize()
 
 
-def user_prodcuts(graph):
+def user_products(graph):
     spm = UserMessage.from_graph(graph)
     user_prod = context.user_service.get_user_purchases(spm.user)
     return BoughtProductResponse.list_to_graph(user_prod).serialize()
@@ -67,7 +67,7 @@ def comm():
 routings = {
     Ontologies.SEARCH_PRODUCT_MESSAGE: search_products,
     Ontologies.USER_MESSAGE: user,
-    Ontologies.USER_PRODUCTS_MESSAGE: user_prodcuts
+    Ontologies.USER_PRODUCTS_MESSAGE: user_products
 }
 
 if __name__ == '__main__':
